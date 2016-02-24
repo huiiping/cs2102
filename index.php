@@ -29,7 +29,7 @@ session_start();
       <ul class="menu">
         <li><a href="#" class="nav"> Home </a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">My Listing</a></li>
+        <li><a href="mylistings.php" class="nav">My Listing</a></li>
         <li class="divider"></li>
         <li><a href="#" class="nav">Bidding</a></li>
         <li class="divider"></li>
