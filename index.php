@@ -76,7 +76,7 @@ session_start();
 	  <?php
 		if($_SESSION["login_user"]) {
 		?>
-		Welcome <?php echo $_SESSION["login_user"]; ?>. Click here to <a href="logout.php" tite="Logout">Logout.
+		Welcome <?php echo $_SESSION["login_name"]; ?>. Click here to <a href="logout.php" tite="Logout">Logout. </a>
 		<?php
 		}
 		else {
