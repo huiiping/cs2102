@@ -491,3 +491,31 @@ text-align:center;
 color:#666666;
 padding:10px 0 0 60px;
 }
+
+/*----------register--------------*/
+label.register_label{
+width:120px;
+float:left;
+font-size:12px;
+text-align:left;
+padding:4px 5px 0 0;
+color: #333333;
+}
+input.register_input{
+width:253px;
+height:18px;
+background-color:#fff;
+color:#999999;
+border:1px #DFDFDF solid;
+float:left;
+}
+textarea.register_input2{
+width:253px;
+height:48px;
+resize: none;
+background-color:#fff;
+color:#999999;
+border:1px #DFDFDF solid;
+float:left;
+overflow-y: scrollable;
+}
