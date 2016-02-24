@@ -1,4 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?php
+session_start();
+?>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Tools Shop</title>
@@ -86,9 +90,22 @@
 		</ul>
 		<br>
 <div class="center_title_bar">Borrowed Items</div>
+
+		<?php
+		if($_SESSION["login_user"]) {
+		?>
+		Welcome <?php echo $_SESSION["login_name"]; ?>. 
+		
+		<?php
+		}
+		else {
+			header("location: loginpage.php");
+		}
+		?>
+		
 		<?php
 		include 'php_func\functions.php';
-		$result = select_Borrowed_Items();
+		$result = select_Borrowed_Items($_SESSION["login_user"]);
 		
 		if(pg_num_rows($result) > 0){
 			while ($row = pg_fetch_row($result)){

@@ -38,19 +38,16 @@ if($_SESSION["login_user"]) {
       <ul class="menu">
         <li><a href="#" class="nav"> Home </a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Products</a></li>
+        <li><a href="mylistings.php" class="nav">My Listing</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Specials</a></li>
+        <li><a href="mybiditems.php" class="nav">Bidding</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">My account</a></li>
+		<li><a href="additem.php" class="nav">Add Item</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Sign Up</a></li>
+        <li><a href="logout.php" class="nav">Logout</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Shipping </a></li>
+        <li><a href="register.php" class="nav">Sign Up</a></li>
         <li class="divider"></li>
-        <li><a href="contact.html" class="nav">Contact Us</a></li>
-        <li class="divider"></li>
-        <li><a href="details.html" class="nav">Details</a></li>
       </ul>
     </div>
     <!-- end of menu tab -->
@@ -129,7 +126,7 @@ if($_SESSION["login_user"]) {
 		?>
 		<div class="center_title_bar">List of Users</div>
 		<?php
-			$result = admin_select_All_Users();
+			$result = select_All_Users();
 				echo "<table border='1'>";
 				echo "<tr><th>Name</th><th>Email</th><th>Password</th><th>Address</th><th>Display Picture</th>   </tr>"; 
 
@@ -146,7 +143,7 @@ if($_SESSION["login_user"]) {
 
 				echo "<td>".$e."</td>";
 
-				echo "<td><a href='admin_edit_user.php?email=$b'>Edit</a>    <a href='db.php?chkid=$a'>Delete</a></td>";
+				echo "<td><a href='admin_edit_user.php?email=$b'>Edit</a>    <a href='admin_remove_user.php?email=$b'>Delete</a></td>";
 
 				echo "</tr>";    
 
