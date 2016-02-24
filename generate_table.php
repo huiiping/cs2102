@@ -16,7 +16,7 @@ function create_User_Table(){
 function
  create_Category_Table(){
 	$query = 'CREATE TABLE category(
-			catId INT PRIMARY KEY,
+			catId SERIAL PRIMARY KEY,
 			name VARCHAR(256));';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
@@ -24,7 +24,7 @@ function
 /*loanSetting column maybe will be 'share' or 'bid'*/
 function create_Item_Table(){
 	$query = 'CREATE TABLE item(
-			itemID VARCHAR(256) PRIMARY KEY,
+			itemID SERIAL PRIMARY KEY,
 			item_name VARCHAR(256),
 			description VARCHAR(256),
 			availability BOOLEAN,
@@ -39,9 +39,9 @@ function create_Item_Table(){
 
 function create_Bid_Table(){
 	$query = 'CREATE TABLE bid(
-			bidID INT PRIMARY KEY,
+			bidID SERIAL PRIMARY KEY,
 			bidAmt VARCHAR(256),
-			itemID VARCHAR(256),
+			itemID INT,
 			bidder VARCHAR(256),
 			dateLastBid DATE,
 			FOREIGN KEY (itemID) REFERENCES item(itemID) ON DELETE CASCADE,
@@ -51,7 +51,7 @@ function create_Bid_Table(){
 
 function create_Loan_Table(){
 	$query = 'CREATE TABLE loan(
-			itemID VARCHAR(256),
+			itemID INT,
 			bidID INT,
 			borrower VARCHAR(256),
 			borrowedBegin DATE,
@@ -87,7 +87,7 @@ function create_Review_Table(){
 }
 
 function insert_New_Cat(){
-	$query = 'INSERT INTO category VALUES (1, \'Book\'), (2, \'Furniture\'), (3, \'Tool\'), (4, \'Appliance\');';
+	$query = 'INSERT INTO category VALUES (\'Book\'), (\'Furniture\'), (\'Tool\'), (4, \'Appliance\');';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
 
