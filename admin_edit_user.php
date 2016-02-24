@@ -74,7 +74,7 @@
 			extract($_POST); 
 			if($upd)
 			{
-				update_User_Details($username, $_GET['email'], $password, $address);
+				admin_update_User_Details($username, $_GET['email'], $password, $address);
 				header('location:admin_manage_users.php');
 			}
 		?>

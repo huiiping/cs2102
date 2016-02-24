@@ -64,7 +64,7 @@ function select_OnLoan_Items(){
 		return $result;
 	}
 	
-	function insert_New_Item(){
+	function admin_insert_New_Item(){
 		$cat = $_POST["formItemCategory"];
 		echo $cat;
 		$name = $_POST["itemname"];
@@ -88,7 +88,7 @@ function select_OnLoan_Items(){
 		return $result;
 	}
 	
-	function insert_New_User(){
+	function admin_insert_New_User(){
 		$name = $_POST["username"];
 		$email = $_POST["email"];
 		$password = $_POST["password"];
@@ -106,7 +106,7 @@ function select_OnLoan_Items(){
 		
 	}
 	
-	function update_User_Details($name, $email, $password, $address){
+	function admin_update_User_Details($name, $email, $password, $address){
 		$query = 'UPDATE users SET name=\''. $name . '\',
 		password=\'' . $password . '\', address=\'' . $address . '\' WHERE email=\'' . $email . '\';';
 		$result = pg_query($query);
@@ -121,12 +121,12 @@ function select_OnLoan_Items(){
 	
 if(isset($_POST['admin_insert_item_submit']))
 {
-	insert_New_Item();
+	admin_insert_New_Item();
 }
 
 if(isset($_POST['admin_insert_user_submit']))
 {
-	insert_New_User();
+	admin_insert_New_User();
 }
 	
 //pg_close($dbconn);
