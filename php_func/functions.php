@@ -8,8 +8,8 @@ or die('Could not connect: ' . pg_last_error());
     return $string;  //returns the second argument passed into the function
   }
     
-  function select_Available_Items(){
-	$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where availability = \'YES\' AND i.category = c.catid AND i.owner = u.email;';
+  function select_Available_Items($login_user){
+	$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where availability = \'YES\' AND i.category = c.catid AND i.owner = \'' . $email . '\';';
 	$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 	
 	return $result;
