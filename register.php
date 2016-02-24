@@ -32,7 +32,7 @@
 	<div class="center_content">
 	  <div class="center_title_bar">User Registration</div>
 	  <center>
-		<form action="register.php" method="post" id="form">
+		<form action="register.php" method="post">
 			<table align="center"> 
 			  <tr>
 				<td><label class="register_label">Username: </label></td>
@@ -46,8 +46,7 @@
 			  </tr>
 			  <tr>
 				<td><label class="register_label">Residential Address: </label></td>
-				<td><textarea name="address" class="register_input2" required>
-					<?php echo $_POST['address']; ?></textarea></td>
+				<td><textarea name="address" class="register_input2" required><?php echo $_POST['address']; ?></textarea></td>
 			  </tr>
 			  <tr>
 				<td><label class="register_label">Password: </label></td>
@@ -56,13 +55,6 @@
 			  <tr>
 				<td><label class="register_label">Confirm Password: </label></td>
 				<td><input type="password" name="cpassword" class="register_input" required /></td>
-			  </tr>
-			  <tr>
-				<td><label class="register_label">Logon Type: </label></td>
-				<td><input type="radio" name="logon" value="ADMIN" 
-					<?php if($_POST['logon'] == "ADMIN") { echo "checked=\"checked\""; } ?> required/>Admin
-					<input type="radio" name="logon" value="USERPUBLIC" 
-					<?php if($_POST['logon'] == "USERPUBLIC") { echo "checked=\"checked\""; } ?>required />User Public</td>
 			  </tr>
 			  <tr>
 				<td></td>
