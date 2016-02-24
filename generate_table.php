@@ -92,7 +92,7 @@ function insert_New_Cat(){
 }
 
 function insert_Admin(){
-	$query = 'INSERT INTO users (email, password, logonType) VALUES (\'Admin\', \'password\', \'ADMIN\');';
+	$query = 'INSERT INTO users (email, password, logonType) VALUES (\'admin\', \'password\', \'ADMIN\');';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
 
