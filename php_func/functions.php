@@ -8,29 +8,29 @@ or die('Could not connect: ' . pg_last_error());
     return $string;  //returns the second argument passed into the function
   }
     
-  function select_Available_Items($login_user){
-	$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where availability = \'YES\' AND i.category = c.catid AND i.owner = \'' . $email . '\';';
+  function select_Available_Items($email){
+	$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where availability = \'YES\' AND i.category = c.catid AND i.owner = u.email AND i.owner = \'' . $email . '\';';
 	$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 	
 	return $result;
 	}
 
-function select_OnLoan_Items(){
-	$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where availability = \'NO\' AND i.category = c.catid AND i.owner = u.email;';
+function select_OnLoan_Items($email){
+	$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where availability = \'NO\' AND i.category = c.catid AND i.owner = u.email AND i.owner = \'' . $email . '\';';
 	$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 	
 	return $result;
 	}
 	
-	function select_Borrowed_Items(){
-	$query = 'SELECT i.item_name, b.bidid, u.name, i.item_pic, borrowedbegin, borrowedend FROM loan l, item i, bid b, users u where l.itemid = i.itemid AND l.bidid = b.bidid AND l.borrower = u.email;';
+	function select_Borrowed_Items($email){
+	$query = 'SELECT i.item_name, b.bidid, u.name, i.item_pic, borrowedbegin, borrowedend FROM loan l, item i, bid b, users u where l.itemid = i.itemid AND l.bidid = b.bidid AND l.borrower = u.email AND l.borrower = \'' . $email . '\';';
 	$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 	
 	return $result;
 	}
 	
-	function select_Current_Bidding_Items(){
-	$query = 'SELECT i.item_name, b.bidid, b.bidamt, u.name, i.item_pic, b.datelastbid FROM bid b, item i, users u where b.itemid = i.itemid AND b.bidder = u.email;';
+	function select_Current_Bidding_Items($email){
+	$query = 'SELECT i.item_name, b.bidid, b.bidamt, u.name, i.item_pic, b.datelastbid FROM bid b, item i, users u where b.itemid = i.itemid AND b.bidder = u.email AND b.bidder = \'' . $email . '\';';
 	$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 	
 	return $result;
