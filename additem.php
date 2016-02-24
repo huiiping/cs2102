@@ -45,9 +45,7 @@
 					include('login.php');
 					include('php_func/functions.php');
 
-					$owner=$_SESSION['login_user'];
-
-
+					$owner = $_SESSION['login_user'];
 
 					if (isset($_GET['formSubmit'])) {
 
