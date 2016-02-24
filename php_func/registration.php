@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) { //Execute when user submits form
 			$errormsg = pg_last_error();
 			echo $errormsg;
 		} else { //Insertion succeeded
-			echo 'Registration Succeeded.';
+			header("Location: /loginpage.php");
 		}
 	}
 	pg_close($dbconn);
