@@ -8,6 +8,8 @@ or die('Could not connect: ' . pg_last_error());
 
 
 session_start(); // Starting Session
+
+
 $error=''; // Variable To Store Error Message
 if (isset($_POST['submit'])) {
 	if (empty($_POST['email']) || empty($_POST['password'])) {
@@ -27,12 +29,16 @@ if (isset($_POST['submit'])) {
 		
 		if (pg_num_rows($result) > 0){
 			echo 'success';
-			$_SESSION['login_user']=$email; // Initializing Session
-			header("location: /index.php"); // Redirecting To Other Page
+			$_SESSION["login_user"]=$email; // Initializing Session
+			//header("location: /index.php"); // Redirecting To Other Page
 		}else {
 			$error = "Email or Password is invalid";
 			echo $error;
 		}
+	}
+	
+	if(isset($_SESSION["login_user"])) {
+		header("location: /index.php");
 	}
 	
 	pg_close($dbconn);

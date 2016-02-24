@@ -12,10 +12,15 @@
 <body>
 
 <?php
-include('login.php'); // Includes Login Script
+session_start();
+?>
 
-if(isset($_SESSION['login_user'])){
-header("location: index.php");
+<?php
+include_once("login.php"); // Includes Login Script
+
+if(isset($_SESSION["login_user"])){
+	header("location: index.php");
+	exit();
 }
 ?>
 

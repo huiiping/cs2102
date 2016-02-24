@@ -10,7 +10,7 @@ or die('Could not connect: ' . pg_last_error());
   
   
   function select_All_Items(){
-	$query = 'SELECT * FROM item;';
+	$query = 'SELECT * FROM book;';
 	$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 	
 	return $result;

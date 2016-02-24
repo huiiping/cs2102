@@ -80,12 +80,13 @@ session_start();
 		<?php
 		}
 		else {
-			header("Location: loginpage.php");
+			header("location: loginpage.php");
 		}
 		?>
 	  
 	  
 		<?php
+		
 		include 'php_func\functions.php';
 		
 		
