@@ -32,7 +32,8 @@ if (isset($_POST['submit'])) {
 			$_SESSION["login_user"]=$email; // Initializing Session
 			
 			while ($row = pg_fetch_row($result)){
-				$_SESSION["login_name"]=$row[0];
+				$_SESSION["login_name"]=$row[0]; // get user's name
+				$_SESSION["logon_type"]=$row[5]; // get logontype
 			}
 			//$rows = pg_fetch_row($result);
 			
@@ -45,7 +46,12 @@ if (isset($_POST['submit'])) {
 	}
 	
 	if(isset($_SESSION["login_user"])) {
-		header("location: /index.php");
+		if($_SESSION["logon_type"]=="ADMIN") {
+			header("location: /admin_manage_users.php");
+		}
+		else {
+			header("location: /index.php");
+		}
 	}
 	
 	pg_close($dbconn);

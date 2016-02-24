@@ -8,7 +8,19 @@
 <link rel="stylesheet" type="text/css" href="iecss.css" />
 <![endif]-->
 <script type="text/javascript" src="js/boxOver.js"></script>
-<?php include 'php_func\functions.php'; ?>
+<?php include 'php_func\functions.php'; 
+	session_start();
+?>
+<?php
+if($_SESSION["login_user"]) {
+		?>
+		Welcome <?php echo $_SESSION["login_name"]; ?>. Click here to <a href="logout.php" tite="Logout">Logout. </a>
+		<?php
+		}
+		else {
+			header("location: loginpage.php");
+		}
+?>
 </head>
 <body>
 <div id="main_container">
@@ -117,7 +129,7 @@
 		?>
 		<div class="center_title_bar">List of Users</div>
 		<?php
-			$result = select_All_Users();
+			$result = admin_select_All_Users();
 				echo "<table border='1'>";
 				echo "<tr><th>Name</th><th>Email</th><th>Password</th><th>Address</th><th>Display Picture</th>   </tr>"; 
 

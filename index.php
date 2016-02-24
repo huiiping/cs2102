@@ -29,19 +29,16 @@ session_start();
       <ul class="menu">
         <li><a href="#" class="nav"> Home </a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">My Listing</a></li>
+        <li><a href="mylistings.php" class="nav">My Listing</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Bidding</a></li>
+        <li><a href="mybiditems.php" class="nav">Bidding</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Profile</a></li>
+		<li><a href="additem.php" class="nav">Add Item</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Sign Up</a></li>
+        <li><a href="logout.php" class="nav">Logout</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Shipping </a></li>
+        <li><a href="register.php" class="nav">Sign Up</a></li>
         <li class="divider"></li>
-        <li><a href="contact.html" class="nav">Contact Us</a></li>
-        <li class="divider"></li>
-        <li><a href="details.html" class="nav">Details</a></li>
       </ul>
     </div>
     <!-- end of menu tab -->
