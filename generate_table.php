@@ -1,6 +1,6 @@
 <?php
 $dbconn = pg_connect("host=localhost port=5432 dbname=postgres user=postgres
-password=cs2102")
+password=p@ssword")
 or die('Could not connect: ' . pg_last_error());
 
 function create_User_Table(){
