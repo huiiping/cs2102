@@ -119,6 +119,18 @@ function select_OnLoan_Items(){
 		}
 	}
 	
+	function admin_Delete_User($email){
+		$query = 'DELETE FROM users WHERE email=\'' . $email . '\';';
+		$result = pg_query($query);
+		
+		if(!$result){
+			header("Location: ../admin_manage_users.php?message=".urlencode("FAILED"));
+		}
+		else{
+			header("Location: ../admin_manage_users.php?message=".urlencode("SUCCESS"));
+		}
+	}
+	
 if(isset($_POST['admin_insert_item_submit']))
 {
 	admin_insert_New_Item();
