@@ -79,6 +79,9 @@ session_start();
 		Welcome <?php echo $_SESSION["login_user"]; ?>. Click here to <a href="logout.php" tite="Logout">Logout.
 		<?php
 		}
+		else {
+			header("Location: loginpage.php");
+		}
 		?>
 	  
 	  
