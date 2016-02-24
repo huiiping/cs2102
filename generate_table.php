@@ -31,6 +31,7 @@ function create_Item_Table(){
 			loanSetting VARCHAR(5) CHECK(loanSetting = \'SHARE\' OR loanSetting=\'BID\'),
 			owner VARCHAR(256),
 			category INT,
+			item_pic VARCHAR(256)
 			FOREIGN KEY (owner) REFERENCES users(email) ON DELETE CASCADE,
 			FOREIGN KEY (category) REFERENCES category(catId) ON DELETE CASCADE);';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
