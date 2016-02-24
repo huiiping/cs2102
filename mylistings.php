@@ -13,7 +13,9 @@ session_start();
 <![endif]-->
 <script type="text/javascript" src="js/boxOver.js"></script>
 
-
+<?php 
+		include 'php_func\functions.php';
+?>
 
 <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -101,7 +103,6 @@ session_start();
 		?>
 		
 		<?php
-		include 'php_func\functions.php';
 		$result = select_Available_Items($_SESSION["login_user"]);
 		
 		if(pg_num_rows($result) > 0){
@@ -118,8 +119,7 @@ session_start();
 
 <div class="center_title_bar">Personal Items - ON LOAN</div>
 		<?php
-		include 'php_func\functions.php';
-		$result = select_OnLoan_Items();
+		$result = select_OnLoan_Items($_SESSION["login_user"]);
 		
 		if(pg_num_rows($result) > 0){
 			while ($row = pg_fetch_row($result)){
