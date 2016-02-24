@@ -30,9 +30,13 @@ if (isset($_POST['submit'])) {
 		if (pg_num_rows($result) > 0){
 			echo 'success';
 			$_SESSION["login_user"]=$email; // Initializing Session
-			$rows = pg_fetch_row($result);
 			
-			$_SESSION["login_name"]=$row['name'];
+			while ($row = pg_fetch_row($result)){
+				$_SESSION["login_name"]=$row[0];
+			}
+			//$rows = pg_fetch_row($result);
+			
+			//$_SESSION["login_name"]=$row['name'];
 			//header("location: /index.php"); // Redirecting To Other Page
 		}else {
 			$error = "Email or Password is invalid";
