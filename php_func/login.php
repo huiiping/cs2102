@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
 	
 	if(isset($_SESSION["login_user"])) {
 		if($_SESSION["logon_type"]=="ADMIN") {
-			header("location: /admin_manage_users.php")
+			header("location: /admin_manage_users.php");
 		}
 		else {
 			header("location: /index.php");
