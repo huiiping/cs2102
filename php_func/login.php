@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
 		echo $email . '<br>';
 		echo $password . '<br>';
 		
-		$query = 'SELECT * FROM users where email=\''. $email . '\' and password=' . $password . ';';
+		$query = 'SELECT * FROM users where email=\''. $email . '\' and password=\'' . $password . '\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 		
 		if (pg_num_rows($result) > 0){
