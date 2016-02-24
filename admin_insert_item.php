@@ -145,6 +145,8 @@
 
 
 		?>
+		
+		<div class="center_title_bar">List of Items</div>
     </div>
     <!-- end of center content -->
     <div class="right_content">

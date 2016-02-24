@@ -31,7 +31,7 @@ function create_Item_Table(){
 			loanSetting VARCHAR(5) CHECK(loanSetting = \'SHARE\' OR loanSetting=\'BID\'),
 			owner VARCHAR(256),
 			category INT,
-			item_pic VARCHAR(256)
+			item_pic VARCHAR(256),
 			FOREIGN KEY (owner) REFERENCES users(email) ON DELETE CASCADE,
 			FOREIGN KEY (category) REFERENCES category(catId) ON DELETE CASCADE);';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -40,7 +40,7 @@ function create_Item_Table(){
 function create_Bid_Table(){
 	$query = 'CREATE TABLE bid(
 			bidID SERIAL PRIMARY KEY,
-			bidAmt VARCHAR(256),
+			bidAmt float,
 			itemID INT,
 			bidder VARCHAR(256),
 			dateLastBid DATE,
@@ -87,10 +87,38 @@ function create_Review_Table(){
 }
 
 function insert_New_Cat(){
-	$query = 'INSERT INTO category VALUES (\'Book\'), (\'Furniture\'), (\'Tool\'), (4, \'Appliance\');';
+	$query = 'INSERT INTO category (name) VALUES (\'Appliances\'), (\'Home Maintenance\'), (\'Personal Care\'), (\'Books\'), (\'Arts and Crafts\');';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
 
+function insert_Admin(){
+	$query = 'INSERT INTO users (email, password, logonType) VALUES (\'Admin\', \'password\', \'ADMIN\');';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
+function insert_Users(){
+	$query = 'INSERT INTO users (name, email, password, address, display_pic, logonType) VALUES (\'Oliver\', \'oliver@gmail.com\', \'123\', \'Orchard Boulevard\', \'\', \'USERPUBLIC\'),
+	(\'Jamie\', \'jamie@gmail.com\', \'123\', \'Bugis Town\', \'\', \'USERPUBLIC\'), (\'Danny\', \'danny@dan.com\', \'123\', \'Chinatown\', \'\', \'USERPUBLIC\'),
+	(\'Zen\', \'zen@gmail.com\', \'123\', \'West Coast\', \'\', \'USERPUBLIC\'), (\'Joo\', \'joo@gmail.com\', \'123\', \'East Coast\', \'\', \'USERPUBLIC\');';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
+function insert_Items(){
+	$query = 'INSERT INTO item (item_name, description, availability, loanSetting, owner, category, item_pic) VALUES (\'Hair Dryer\', \'Hair Dryer\', \'TRUE\', \'SHARE\', \'oliver@gmail.com\', \'1\', \'HairDryer.jpg\'), 
+	(\'Shaver\', \'Shaver\', \'TRUE\', \'SHARE\', \'oliver@gmail.com\', \'1\', \'Shaver.jpg\'), (\'Bread Toaster\', \'Bread Toaster\', \'FALSE\', \'SHARE\', \'oliver@gmail.com\', \'1\', \'BreadToaster.jpg\'), 
+	(\'Toothpaste\', \'Toothpaste\', \'FALSE\', \'BID\', \'danny@dan.com\', \'3\', \'Toothpaste.jpg\'), (\'Scissor\', \'Scissor\', \'FALSE\', \'BID\', \'joo@gmail.com\', \'5\', \'Scissor.jpg\');';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
+function insert_Bid(){
+	$query = 'INSERT INTO bid (bidamt, itemid, bidder, datelastbid) VALUES (\'1\', \'4\', \'oliver@gmail.com\', NOW()), (\'1\', \'5\', \'oliver@gmail.com\', NOW());';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
+function insert_Loan(){
+	$query = 'INSERT INTO loan (itemid, bidid, borrower, borrowedbegin, borrowedend) VALUES (\'4\', \'1\', \'oliver@gmail.com\', NOW(), NOW()), (\'5\', \'2\', \'oliver@gmail.com\', NOW(), NOW());';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
 
 create_User_Table();
 create_Category_Table();
@@ -100,6 +128,11 @@ create_Loan_Table();
 create_Preference_Table();
 create_Review_Table();
 insert_New_Cat();
+insert_Admin();
+insert_Users();
+insert_Items();
+insert_Bid();
+insert_Loan();
 echo "Successful Generated all tables";
 pg_close($dbconn);
 ?>
