@@ -36,6 +36,98 @@ function select_OnLoan_Items(){
 	return $result;
 	}
 
+	function select_All_Items(){
+		$query = 'SELECT * FROM book;';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+	
+		return $result;
+	}
+	
+	function select_All_Categories(){
+		$query = 'SELECT * FROM category;';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+	
+		return $result;
+	}
+	
+	function select_All_Users(){
+		$query = 'SELECT * FROM users;';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		return $result;
+	}
+	
+	function select_A_User($email){
+		$query = 'SELECT * FROM users WHERE email=\'' . $email . '\';';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		return $result;
+	}
+	
+	function insert_New_Item(){
+		$cat = $_POST["formItemCategory"];
+		echo $cat;
+		$name = $_POST["itemname"];
+		$desc = $_POST["itemDesc"];
+		$shareType = $_POST["shareType"];
+		echo $shareType;
+		$owner = $_POST["formOwners"];
+		echo $owner;
+		$query = 'INSERT INTO item (itemID, item_name, description, availability, loanSetting, owner, category) VALUES(
+		\'' . str_replace(" ", "_", $name) . $owner . '\', \'' . $name . '\', \'' . $desc . '\', \'YES\', \'' . strtoupper($shareType)
+		. '\', \'' . $owner . '\' , \'' . $cat . '\');';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+	
+		if(!$result){
+			header("Location: ../admin_insert_item.php?message=".urlencode("FAILED"));
+		}
+		else{
+			header("Location: ../admin_insert_item.php?message=".urlencode("SUCCESS"));
+		}
+	
+		return $result;
+	}
+	
+	function insert_New_User(){
+		$name = $_POST["username"];
+		$email = $_POST["email"];
+		$password = $_POST["password"];
+		$address = $_POST["address"];
+		$query = 'INSERT INTO users (name, email, password, address, logonType) VALUES(
+		\'' . $name . '\', \'' . $email . '\', \'' . $password . '\', \'' . $address . '\', \'USERPUBLIC\');';
+		$result = pg_query($query);
+		
+		if(!$result){
+			header("Location: ../admin_manage_users.php?message=".urlencode("FAILED"));
+		}
+		else{
+			header("Location: ../admin_manage_users.php?message=".urlencode("SUCCESS"));
+		}
+		
+	}
+	
+	function update_User_Details($name, $email, $password, $address){
+		$query = 'UPDATE users SET name=\''. $name . '\',
+		password=\'' . $password . '\', address=\'' . $address . '\' WHERE email=\'' . $email . '\';';
+		$result = pg_query($query);
+		
+		if(!$result){
+			header("Location: ../admin_manage_users.php?message=".urlencode("FAILED"));
+		}
+		else{
+			header("Location: ../admin_manage_users.php?message=".urlencode("SUCCESS"));
+		}
+	}
+	
+if(isset($_POST['admin_insert_item_submit']))
+{
+	insert_New_Item();
+}
+
+if(isset($_POST['admin_insert_user_submit']))
+{
+	insert_New_User();
+}
 	
 //pg_close($dbconn);
 ?>
