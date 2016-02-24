@@ -57,6 +57,13 @@ function select_OnLoan_Items(){
 		return $result;
 	}
 	
+	function select_All_Public_Users(){
+		$query = 'SELECT * FROM users WHERE logonType=\'USERPUBLIC\';';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		return $result;
+	}
+	
 	function select_A_User($email){
 		$query = 'SELECT * FROM users WHERE email=\'' . $email . '\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());

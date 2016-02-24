@@ -126,7 +126,7 @@ if($_SESSION["login_user"]) {
 		?>
 		<div class="center_title_bar">List of Users</div>
 		<?php
-			$result = select_All_Users();
+			$result = select_All_Public_Users();
 				echo "<table border='1'>";
 				echo "<tr><th>Name</th><th>Email</th><th>Password</th><th>Address</th><th>Display Picture</th>   </tr>"; 
 
