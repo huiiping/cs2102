@@ -36,7 +36,7 @@ session_start();
   <div id="main_content">
     <div id="menu_tab">
       <ul class="menu">
-        <li><a href="#" class="nav"> Home </a></li>
+        <li><a href="index.php" class="nav"> Home </a></li>
         <li class="divider"></li>
         <li><a href="mylistings.php" class="nav">My Listing</a></li>
         <li class="divider"></li>
