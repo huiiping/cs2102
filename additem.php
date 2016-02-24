@@ -12,17 +12,11 @@
 <body>
 
 <?php
-session_start();
+	$dbconn = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=p@ssword")
+	or die('Could not connect:' . pg_last_error());
+	session_start();
 ?>
 
-<?php
-include_once("login.php"); // Includes Login Script
-
-if(isset($_SESSION["login_user"])){
-	header("location: index.php");
-	exit();
-}
-?>
 
 
 <div id="main_container">
@@ -82,14 +76,10 @@ if(isset($_SESSION["login_user"])){
       <div class="center_title_bar">Add Item</div>
 	   <!--Add item form>-->
 			<?php
-			$dbconn = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=p@ssword")
-			or die('Could not connect:' . pg_last_error());
 
-			session_start();
-
-			// if (!isset($_POST['submit'])) {
-			// 	echo "You are not logged in. Log in to add an item.";
-			// }
+			if (!isset($_SESSION['login_user'])) {
+				echo "You are not logged in. Log in to add an item.";
+			}
 			?>
 			<form>
 				Item Name: <input type="text" name="itemName" id="itemName">
