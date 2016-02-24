@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
 		echo $password . '<br>';
 		
 		$query = 'SELECT * FROM users where email=\''. $email . '\' and password=\'' . $password . '\';';
-		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		$result = pg_query($query);
 		
 		if (pg_num_rows($result) > 0){
 			echo 'success';
@@ -35,13 +35,8 @@ if (isset($_POST['submit'])) {
 				$_SESSION["login_name"]=$row[0]; // get user's name
 				$_SESSION["logon_type"]=$row[5]; // get logontype
 			}
-			//$rows = pg_fetch_row($result);
-			
-			//$_SESSION["login_name"]=$row['name'];
-			//header("location: /index.php"); // Redirecting To Other Page
 		}else {
-			$error = "Email or Password is invalid";
-			echo $error;
+			header("location: /loginpage.php");
 		}
 	}
 	
