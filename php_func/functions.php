@@ -37,8 +37,10 @@ function select_OnLoan_Items($email){
 	}
 
 	function select_All_Items(){
-		$query = 'SELECT * FROM book;';
-		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		$query = 'SELECT i.itemID, i.item_name, i.description, i.availability, i.loanSetting, c.name, i.item_pic, u.name 
+		FROM item i, users u, category c 
+		WHERE i.category=c.catId AND i.owner=u.email;';
+		$result = pg_query($query);
 	
 		return $result;
 	}
@@ -64,6 +66,15 @@ function select_OnLoan_Items($email){
 		return $result;
 	}
 	
+	function select_A_Item($itemId){
+		$query = 'SELECT i.itemID, i.item_name, i.description, i.availability, i.loansetting, i.category, i.item_pic, i.owner
+		FROM item i, users u, category c 
+		WHERE i.owner=u.email AND i.category=c.catId AND i.itemID=\'' . $itemId . '\';';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		return $result;
+	}
+	
 	function select_A_User($email){
 		$query = 'SELECT * FROM users WHERE email=\'' . $email . '\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -72,44 +83,62 @@ function select_OnLoan_Items($email){
 	}
 	
 	function admin_insert_New_Item(){
+		session_start();
+		
 		$cat = $_POST["formItemCategory"];
-		echo $cat;
 		$name = $_POST["itemname"];
 		$desc = $_POST["itemDesc"];
 		$shareType = $_POST["shareType"];
-		echo $shareType;
 		$owner = $_POST["formOwners"];
-		echo $owner;
 		$query = 'INSERT INTO item (item_name, description, availability, loanSetting, owner, category) VALUES(
 		\'' . $name . '\', \'' . $desc . '\', \'TRUE\', \'' . strtoupper($shareType)
 		. '\', \'' . $owner . '\' , \'' . $cat . '\');';
-		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		$result = pg_query($query);
 	
 		if(!$result){
-			header("Location: ../admin_manage_items.php?message=".urlencode("FAILED"));
+			$_SESSION["admin_Insert_Item_Result"] = "Failed to add.";
+			
 		}
 		else{
-			header("Location: ../admin_manage_items.php?message=".urlencode("SUCCESS"));
+			$_SESSION["admin_Insert_Item_Result"] = "Successfully added.";
 		}
 	
-		return $result;
+		header("Location: ../admin_manage_items.php");
 	}
 	
 	function admin_insert_New_User(){
-		$name = $_POST["username"];
-		$email = $_POST["email"];
-		$password = $_POST["password"];
-		$address = $_POST["address"];
-		$query = 'INSERT INTO users (name, email, password, address, logonType) VALUES(
-		\'' . $name . '\', \'' . $email . '\', \'' . $password . '\', \'' . $address . '\', \'USERPUBLIC\');';
-		$result = pg_query($query);
 		
-		if(!$result){
-			header("Location: ../admin_manage_users.php?message=".urlencode("FAILED"));
+		$find_exist_record = select_A_User($_POST["email"]);
+		$err = "";
+		if(pg_num_rows($find_exist_record) > 0){
+			$err = "This email has been used.";
+			echo $err;
 		}
-		else{
-			header("Location: ../admin_manage_users.php?message=".urlencode("SUCCESS"));
+		
+		$password = $_POST["password"];
+		$cpassword = $_POST["confirmpassword"];
+		if($password != $cpassword){
+			$err = "Password not matched.";
+			echo $err;
 		}
+		
+		if($err == ""){
+			$name = $_POST["username"];
+			$email = $_POST["email"];
+			$address = $_POST["address"];
+			$query = 'INSERT INTO users (name, email, password, address, logonType) VALUES(
+			\'' . $name . '\', \'' . $email . '\', \'' . $password . '\', \'' . $address . '\', \'USERPUBLIC\');';
+			$result = pg_query($query);
+			
+			if(!$result){
+				$err = "Failed to register.";
+				echo $err;
+			}
+			else{
+				echo "Success";
+			}
+		}
+		
 		
 	}
 	
@@ -119,11 +148,30 @@ function select_OnLoan_Items($email){
 		$result = pg_query($query);
 		
 		if(!$result){
-			header("Location: ../admin_manage_users.php?message=".urlencode("FAILED"));
+			$_SESSION["admin_Insert_User_Result"] = "Failed to update.";
+			
 		}
 		else{
-			header("Location: ../admin_manage_users.php?message=".urlencode("SUCCESS"));
+			$_SESSION["admin_Insert_User_Result"] = "Successfully Updated.";
 		}
+	
+		header("Location: ../admin_manage_users.php");
+	}
+	
+	function admin_update_Item_Details($itemId, $itemname, $description, $itemCat, $itemShareType, $itemOwner){
+		$query = 'UPDATE item SET item_name=\''. $itemname . '\',
+		description=\'' . $description . '\', category=\'' . $itemCat . '\', loanSetting=\'' . $itemShareType . '\', owner=\'' . $itemOwner . '\' WHERE itemID=\'' . $itemId . '\';';
+		$result = pg_query($query);
+		
+		if(!$result){
+			$_SESSION["admin_Insert_Item_Result"] = "Failed to update.";
+			
+		}
+		else{
+			$_SESSION["admin_Insert_Item_Result"] = "Successfully Updated.";
+		}
+	
+		header("Location: ../admin_manage_items.php");
 	}
 	
 	function admin_Delete_User($email){
@@ -135,6 +183,18 @@ function select_OnLoan_Items($email){
 		}
 		else{
 			header("Location: ../admin_manage_users.php?message=".urlencode("SUCCESS"));
+		}
+	}
+	
+	function admin_Delete_Item($itemId){
+		$query = 'DELETE FROM item WHERE itemID=\'' . $itemId . '\';';
+		$result = pg_query($query);
+		
+		if(!$result){
+			header("Location: ../admin_manage_items.php?message=".urlencode("FAILED"));
+		}
+		else{
+			header("Location: ../admin_manage_items.php?message=".urlencode("SUCCESS"));
 		}
 	}
 	

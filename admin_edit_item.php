@@ -1,13 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Manage Items</title>
+<title>Update User Particular</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <!--[if IE 6]>
 <link rel="stylesheet" type="text/css" href="iecss.css" />
 <![endif]-->
 <script type="text/javascript" src="js/boxOver.js"></script>
+<?php include 'php_func\functions.php'; ?>
 <?php 
 	session_start();
 ?>
@@ -26,6 +27,9 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 <div id="main_container">
   <div id="header">
     <div class="top_right">
+      <div class="languages">
+        <div class="lang_text">Languages:</div>
+        <a href="#" class="lang"><img src="images/en.gif" alt="" border="0" /></a> <a href="#" class="lang"><img src="images/de.gif" alt="" border="0" /></a> </div>
       <div class="big_banner"> <a href="#"><img src="images/banner728.jpg" alt="" border="0" /></a> </div>
     </div>
     <div id="logo"> <a href="#"><img src="images/logo.png" alt="" border="0" width="182" height="85" /></a> </div>
@@ -35,12 +39,20 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
       <ul class="menu">
         <li><a href="#" class="nav"> Home </a></li>
         <li class="divider"></li>
+        <li><a href="mylistings.php" class="nav">My Listing</a></li>
+        <li class="divider"></li>
+        <li><a href="mybiditems.php" class="nav">Bidding</a></li>
+        <li class="divider"></li>
+		<li><a href="additem.php" class="nav">Add Item</a></li>
+        <li class="divider"></li>
         <li><a href="logout.php" class="nav">Logout</a></li>
+        <li class="divider"></li>
+        <li><a href="register.php" class="nav">Sign Up</a></li>
         <li class="divider"></li>
       </ul>
     </div>
     <!-- end of menu tab -->
-    <div class="crumb_navigation"> Navigation: <span class="current">Manage Items</span> </div>
+    <div class="crumb_navigation"> Navigation: <span class="current">Update Item Details</span> </div>
     <div class="left_content">
       <div class="title_box">Menu</div>
       <ul class="left_menu">
@@ -54,14 +66,24 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
     <!-- end of left content -->
 	<!-- Insert form here -->
     <div class="center_content">
-      <div class="center_title_bar">New Item</div>
-	   <form action="php_func\functions.php" method="post">
-	   
-		<table width="90%" align="center">
+      <div class="center_title_bar">Update User Details</div>
+		<?php 
+			$result = select_A_Item($_GET['itemID']);
+			
+			$rowReceived=pg_fetch_array($result);
+			extract($_POST); 
+			if($upd)
+			{
+				admin_update_Item_Details($_GET['itemID'], $itemname, $itemDesc, $formItemCategory, $shareType, $formOwners);
+				header('location:admin_manage_items.php');
+			}
+		?>
+	   <form method="post" enctype="multipart/form-data">
+			<table>
 			<tr>
 				<td><label for="lblCategory" class="register_label">Category:</label></td>
 				<td>
-					<select name="formItemCategory" required>
+					<select name="formItemCategory" class="optionL" required>
 						<option value="">Chose one..</option>
 						<?php
 							include_once 'php_func\functions.php';
@@ -69,9 +91,14 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 			
 							if(pg_num_rows($result) > 0){
 								while ($row = pg_fetch_row($result)){
-									echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';
+									echo '<option value="' . $row[0] . '"';
+									if($rowReceived['category'] == $row[0]){
+										echo 'selected';
+									} 
+									echo '>' . $row[1] . '</option>';
 								}
 							}
+							
 						?>
 					</select>
 				</td>
@@ -79,24 +106,24 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 			<tr>
 				<td><label for="lblItemName" class="register_label">Name:</label></td>
 				<td>
-					<input type="text" name="itemname" size="25" required placeholder="Type the item name here" class="register_input">
+					<input type="text" name="itemname" size="25" required placeholder="Type the item name here" class="register_input" value="<?php echo $rowReceived['item_name'];?>">
 				</td>
 			</tr>
 			<tr>
 				<td><label for="lblDescription" class="register_label">Description:</label></td>
 				<td>
-					<textarea name="itemDesc" required placeholder="Type the description here" class="register_input2"></textarea>
+					<textarea name="itemDesc" required placeholder="Type the description here" class="register_input2"><?php echo $rowReceived['description'];?></textarea>
 				</td>
 			</tr>
 			<tr>
 				<td><label for="lblLoanType" class="register_label">Share it for free or for an amount:</label></td>
 				<td>
 					<input type="radio" name="shareType"
-					<?php if (isset($share) && $share=="bid") echo "checked";?>
-					value="bid">Bid to win
+					<?php echo (string)$rowReceived['loansetting'] == "BID" ?  "CHECKED" : "";?>
+					value="BID">Bid to win
 					<input type="radio" name="shareType"
-					<?php if (isset($share) && $share=="share") echo "checked";?>
-					value="share" CHECKED>Free
+					<?php echo (string)$rowReceived['loansetting'] == "SHARE" ?  "CHECKED" : "";?>
+					 value="SHARE">Free
 				</td>
 			</tr>
 			<tr>
@@ -108,7 +135,11 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 							$result = select_All_Public_Users();
 							if(pg_num_rows($result) > 0){
 								while ($row = pg_fetch_row($result)){
-									echo '<option value="' . $row[1] . '">' . $row[0] . '</option>';
+									echo '<option value="' . $row[1] . '"';
+									if($rowReceived['owner'] == $row[1]){
+										echo 'selected';
+									} 
+									echo '>' . $row[0] . '</option>';
 								}
 							}
 						?>
@@ -116,65 +147,12 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" ><input type="submit", name="admin_insert_item_submit" value="Inserts"></td>
+				<td colspan="2" align="center" ><input type="submit" value="Update" name="upd"/>
+				<input type="button" name="cancel" value="Cancel" onclick="window.location='admin_manage_items.php'" />
+				</td>
 			</tr>
-			
-		</table>
-		<?php
-			//$success = $_GET["message"];
-
-			//if (isset($success)) {
-				//if($success == "SUCCESS"){
-					//echo 'Successfully added.';
-				//}
-				//else{
-					//echo 'Failed to add.';
-				//}
-			//}
-			
-			if($_SESSION["admin_Insert_Item_Result"] != ""){
-				echo $_SESSION["admin_Insert_Item_Result"];
-				$_SESSION["admin_Insert_Item_Result"] = "";
-			}
-		?>
+			</table>
 		</form>
-		<div class="center_title_bar">List of Items</div>
-		<?php
-			$result = select_All_Items();
-				echo "<table class=\"rwd-table\">";
-				echo "<tr><th>Name</th><th>Description</th><th>Availability</th><th>Loan Type</th><th>Category</th><th>Image</th><th>Owner Name</th>  </tr>"; 
-
-				while(list($id,$iName,$iDesc,$iAvail,$iLoanT, $iCat, $iImage, $iOwner)=pg_fetch_array($result))
-				{
-
-				echo "<tr>";    echo "<td>".$iName."</td>";
-
-				echo "<td>".$iDesc."</td>";
-
-				echo "<td>";
-				if ($iAvail == "t"){
-					echo "YES";
-				}else{
-					echo "NO";
-				}
-				echo "</td>";
-
-				echo "<td>".$iLoanT."</td>";
-				
-				echo "<td>".$iCat."</td>";
-				
-				echo "<td>".$iImage."</td>";
-				
-				echo "<td>".$iOwner."</td>";
-
-				echo "<td><a href='admin_edit_item.php?itemID=$id' class=\"submit_btn\">Edit</a>    <a href='admin_remove_item.php?itemID=$id' class=\"submit_btn\">Delete</a></td>";
-
-				echo "</tr>";    
-
-				}
-
-				echo "</table>";
-		?>
     </div>
     <!-- end of center content -->
     <div class="right_content">

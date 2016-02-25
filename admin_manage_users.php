@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Tools Shop</title>
+<title>Manage Users</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <!--[if IE 6]>
 <link rel="stylesheet" type="text/css" href="iecss.css" />
 <![endif]-->
 <script type="text/javascript" src="js/boxOver.js"></script>
-<?php include 'php_func\functions.php'; 
+<?php 
 	session_start();
 ?>
 <?php
@@ -26,9 +26,6 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 <div id="main_container">
   <div id="header">
     <div class="top_right">
-      <div class="languages">
-        <div class="lang_text">Languages:</div>
-        <a href="#" class="lang"><img src="images/en.gif" alt="" border="0" /></a> <a href="#" class="lang"><img src="images/de.gif" alt="" border="0" /></a> </div>
       <div class="big_banner"> <a href="#"><img src="images/banner728.jpg" alt="" border="0" /></a> </div>
     </div>
     <div id="logo"> <a href="#"><img src="images/logo.png" alt="" border="0" width="182" height="85" /></a> </div>
@@ -43,14 +40,13 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
       </ul>
     </div>
     <!-- end of menu tab -->
-    <div class="crumb_navigation"> Navigation: <span class="current">Home</span> </div>
+    <div class="crumb_navigation"> Navigation: <span class="current">Manage Users</span> </div>
     <div class="left_content">
       <div class="title_box">Menu</div>
       <ul class="left_menu">
-        <li class="odd"><a href="#">Manage Users</a></li>
-        <li class="even"><a href="#">Insert Item</a></li>
-        <li class="odd"><a href="#">Manage Items</a></li>
-        <li class="even"><a href="#">Search Information</a></li>
+        <li class="odd"><a href="admin_manage_users.php">Manage Users</a></li>
+        <li class="odd"><a href="admin_manage_items.php">Manage Items</a></li>
+        <li class="even"><a href="admin_search_info.php">Search Information</a></li>
       </ul>
       <div class="border_box">
       </div>
@@ -59,57 +55,45 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 	<!-- Insert form here -->
     <div class="center_content">
       <div class="center_title_bar">Manage Users</div>
-	   <form action="php_func\functions.php" method="post">
-		<table border="1">
+	   <form action="admin_manage_users.php" method="post">
+		<table width="90%" align="center">
 			<tr>
 				<td><label for="lblusername" class="register_label">Name:</label></td>
-				<td><input type="text" name="username" class="register_input"></td>
+				<td><input type="text" name="username" class="register_input" required placeholder="Type the name here" value="<?php echo $_POST["username"];?>"></td>
 			</tr>
 			
 			<tr>
 				<td><label for="lblemail"  class="register_label">Email:</label></td>
-				<td><input type="email" name="email" class="register_input"><br></td>
+				<td><input type="email" name="email" class="register_input" required placeholder="example@example.com" value="<?php echo $_POST["email"];?>"><br></td>
 			</tr>
 			
 			<tr>
 				<td><label for="lblpassword"  class="register_label">Password:</label></td>
-				<td><input type="password" name="password" class="register_input"></td>
+				<td><input type="password" name="password" class="register_input" required placeholder="********" value="<?php echo $_POST["password"];?>"></td>
 			</tr>
 			
 			<tr>
 				<td><label for="lblconfirmpassword"  class="register_label">Confirm Password:</label></td>
-				<td><input type="password" name="confirmpassword" class="register_input"></td>
+				<td><input type="password" name="confirmpassword" class="register_input" required placeholder="********" value="<?php echo $_POST["confirmpassword"];?>"></td>
 			</tr>
 			
 			<tr>
 				<td><label for="lbladdress"  class="register_label">Address:</label></td>
-				<td><textarea name="address" class="register_input2"></textarea></td>
+				<td><textarea name="address" class="register_input2" required placeholder="Type the address here"><?php echo $_POST["address"];?></textarea></td>
 			</tr>
 			
 			<tr>
-				<td><input type="submit", name="admin_insert_user_submit" value="Insert"></td>
+				<td colspan="2" align="center" ><input type="submit", name="admin_insert_user_submit" value="Insert"></td>
 			</tr>
 		</table>
-				
+				<?php include 'php_func\functions.php'; ?>
 		</form>
-		
-		<?php
-			$success   = $_GET['message'];
 
-			if (isset($success)) {
-				if($success == "SUCCESS"){
-					echo 'Successfully added.';
-				}
-				else{
-					echo 'Failed to add.';
-				}
-			}
-		?>
 		<div class="center_title_bar">List of Users</div>
 		<?php
 			$result = select_All_Public_Users();
 				echo "<table class=\"rwd-table\">";
-				echo "<tr><th>Name</th><th>Email</th><th>Password</th><th>Address</th><th>Display Picture</th>   </tr>"; 
+				echo "<tr><th>Name</th><th>Email</th><th>Address</th><th>Display Picture</th>   </tr>"; 
 
 				while(list($a,$b,$c,$d,$e)=pg_fetch_array($result))
 				{
@@ -122,7 +106,7 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 
 				echo "<td>".$e."</td>";
 
-				echo "<td><a href='admin_edit_user.php?email=$b'>Edit</a>    <a href='admin_remove_user.php?email=$b'>Delete</a></td>";
+				echo "<td><a href='admin_edit_user.php?email=$b' class=\"submit_btn\">Edit</a>    <a href='admin_remove_user.php?email=$b' class=\"submit_btn\">Delete</a></td>";
 
 				echo "</tr>";    
 

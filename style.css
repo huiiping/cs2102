@@ -520,6 +520,7 @@ float:left;
 overflow-y: scrollable;
 }
 
+/*table style */
 table.rwd-table {
   background: #34495E;
   color: #fff;
@@ -538,4 +539,28 @@ table.rwd-table {
   th, td:before {
     color: #dd5;
   }
+}
+
+/*For hyperlink submit button*/
+a.submit_btn{
+	width:75px;
+	height:24px;
+	display:block;
+	float:right;
+	background:url(images/link_bg.gif) no-repeat center;
+	margin:2px 5px 0 0;
+	text-align:center;
+	line-height:24px;
+	text-decoration:none;
+	color:#159dcc;
+}
+
+/*select style*/
+select.optionL{
+	width:253px;
+	height:18px;
+	background-color:#fff;
+	color:#999999;
+	border:1px #DFDFDF solid;
+	float:left;
 }
