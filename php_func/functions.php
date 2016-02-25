@@ -107,19 +107,21 @@ function select_OnLoan_Items($email){
 	}
 	
 	function admin_insert_New_User(){
-		
+		session_start();
 		$find_exist_record = select_A_User($_POST["email"]);
 		$err = "";
 		if(pg_num_rows($find_exist_record) > 0){
 			$err = "This email has been used.";
-			echo $err;
+			$_SESSION["admin_Insert_User_Result"] = $err;
+			//echo $err;
 		}
 		
 		$password = $_POST["password"];
 		$cpassword = $_POST["confirmpassword"];
 		if($password != $cpassword){
 			$err = "Password not matched.";
-			echo $err;
+			$_SESSION["admin_Insert_User_Result"] = $err;
+			//echo $err;
 		}
 		
 		if($err == ""){
@@ -131,15 +133,14 @@ function select_OnLoan_Items($email){
 			$result = pg_query($query);
 			
 			if(!$result){
-				$err = "Failed to register.";
-				echo $err;
+				$_SESSION["admin_Insert_User_Result"] = "Failed to register.";
 			}
 			else{
-				echo "Success";
+				$_SESSION["admin_Insert_User_Result"] = "Successfully registered.";
 			}
 		}
 		
-		
+		header("Location: ../admin_manage_users.php");
 	}
 	
 	function admin_update_User_Details($name, $email, $password, $address){
@@ -148,11 +149,11 @@ function select_OnLoan_Items($email){
 		$result = pg_query($query);
 		
 		if(!$result){
-			$_SESSION["admin_Insert_User_Result"] = "Failed to update.";
+			$_SESSION["admin_Update_User_Result"] = "Failed to update.";
 			
 		}
 		else{
-			$_SESSION["admin_Insert_User_Result"] = "Successfully Updated.";
+			$_SESSION["admin_Update_User_Result"] = "Successfully Updated.";
 		}
 	
 		header("Location: ../admin_manage_users.php");
@@ -164,11 +165,11 @@ function select_OnLoan_Items($email){
 		$result = pg_query($query);
 		
 		if(!$result){
-			$_SESSION["admin_Insert_Item_Result"] = "Failed to update.";
+			$_SESSION["admin_Update_Item_Result"] = "Failed to update.";
 			
 		}
 		else{
-			$_SESSION["admin_Insert_Item_Result"] = "Successfully Updated.";
+			$_SESSION["admin_Update_Item_Result"] = "Successfully Updated.";
 		}
 	
 		header("Location: ../admin_manage_items.php");
@@ -179,11 +180,14 @@ function select_OnLoan_Items($email){
 		$result = pg_query($query);
 		
 		if(!$result){
-			header("Location: ../admin_manage_users.php?message=".urlencode("FAILED"));
+			$_SESSION["admin_Delete_User_Result"] = "Failed to delete.";
+			
 		}
 		else{
-			header("Location: ../admin_manage_users.php?message=".urlencode("SUCCESS"));
+			$_SESSION["admin_Delete_User_Result"] = "Successfully Deleted.";
 		}
+	
+		header("Location: ../admin_manage_users.php");
 	}
 	
 	function admin_Delete_Item($itemId){
@@ -191,11 +195,14 @@ function select_OnLoan_Items($email){
 		$result = pg_query($query);
 		
 		if(!$result){
-			header("Location: ../admin_manage_items.php?message=".urlencode("FAILED"));
+			$_SESSION["admin_Delete_Item_Result"] = "Failed to delete.";
+			
 		}
 		else{
-			header("Location: ../admin_manage_items.php?message=".urlencode("SUCCESS"));
+			$_SESSION["admin_Delete_Item_Result"] = "Successfully Deleted.";
 		}
+	
+		header("Location: ../admin_manage_items.php");
 	}
 	
 if(isset($_POST['admin_insert_item_submit']))

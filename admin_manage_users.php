@@ -55,7 +55,7 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 	<!-- Insert form here -->
     <div class="center_content">
       <div class="center_title_bar">Manage Users</div>
-	   <form action="admin_manage_users.php" method="post">
+	   <form action="php_func\functions.php" method="post">
 		<table width="90%" align="center">
 			<tr>
 				<td><label for="lblusername" class="register_label">Name:</label></td>
@@ -86,11 +86,29 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 				<td colspan="2" align="center" ><input type="submit", name="admin_insert_user_submit" value="Insert"></td>
 			</tr>
 		</table>
-				<?php include 'php_func\functions.php'; ?>
+				
+				<?php 
+				
+					if($_SESSION["admin_Insert_User_Result"] != ""){
+						echo $_SESSION["admin_Insert_User_Result"];
+						$_SESSION["admin_Insert_User_Result"] = "";
+					}
+					
+					if($_SESSION["admin_Update_User_Result"] != ""){
+						echo $_SESSION["admin_Update_User_Result"];
+						$_SESSION["admin_Update_User_Result"] = "";
+					}
+					
+					if($_SESSION["admin_Delete_User_Result"] != ""){
+						echo $_SESSION["admin_Delete_User_Result"];
+						$_SESSION["admin_Delete_User_Result"] = "";
+					}
+				?>
 		</form>
 
 		<div class="center_title_bar">List of Users</div>
 		<?php
+			include_once 'php_func\functions.php';
 			$result = select_All_Public_Users();
 				echo "<table class=\"rwd-table\">";
 				echo "<tr><th>Name</th><th>Email</th><th>Address</th><th>Display Picture</th>   </tr>"; 

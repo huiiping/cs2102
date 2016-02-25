@@ -136,6 +136,17 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 				echo $_SESSION["admin_Insert_Item_Result"];
 				$_SESSION["admin_Insert_Item_Result"] = "";
 			}
+			
+			if($_SESSION["admin_Update_Item_Result"] != ""){
+				echo $_SESSION["admin_Update_Item_Result"];
+				$_SESSION["admin_Update_Item_Result"] = "";
+			}
+			
+			if($_SESSION["admin_Delete_Item_Result"] != ""){
+				echo $_SESSION["admin_Delete_Item_Result"];
+				$_SESSION["admin_Delete_Item_Result"] = "";
+			}
+			
 		?>
 		</form>
 		<div class="center_title_bar">List of Items</div>
@@ -163,7 +174,11 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 				
 				echo "<td>".$iCat."</td>";
 				
-				echo "<td>".$iImage."</td>";
+				echo "<td>";
+				echo '<img src="images/';
+				echo $iImage;
+				echo '" alt="" border="0" width="100" height="100" />';
+				echo "</td>";
 				
 				echo "<td>".$iOwner."</td>";
 
