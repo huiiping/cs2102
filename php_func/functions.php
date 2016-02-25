@@ -86,10 +86,10 @@ function select_OnLoan_Items($email){
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 	
 		if(!$result){
-			header("Location: ../admin_insert_item.php?message=".urlencode("FAILED"));
+			header("Location: ../admin_manage_items.php?message=".urlencode("FAILED"));
 		}
 		else{
-			header("Location: ../admin_insert_item.php?message=".urlencode("SUCCESS"));
+			header("Location: ../admin_manage_items.php?message=".urlencode("SUCCESS"));
 		}
 	
 		return $result;
