@@ -80,8 +80,8 @@ function select_OnLoan_Items($email){
 		echo $shareType;
 		$owner = $_POST["formOwners"];
 		echo $owner;
-		$query = 'INSERT INTO item (itemID, item_name, description, availability, loanSetting, owner, category) VALUES(
-		\'' . str_replace(" ", "_", $name) . $owner . '\', \'' . $name . '\', \'' . $desc . '\', \'YES\', \'' . strtoupper($shareType)
+		$query = 'INSERT INTO item (item_name, description, availability, loanSetting, owner, category) VALUES(
+		\'' . $name . '\', \'' . $desc . '\', \'TRUE\', \'' . strtoupper($shareType)
 		. '\', \'' . $owner . '\' , \'' . $cat . '\');';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 	

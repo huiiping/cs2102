@@ -79,28 +79,28 @@ if($_SESSION["login_user"]) {
 	   <form action="php_func\functions.php" method="post">
 		<table border="1">
 			<tr>
-				<td><label for="lblusername">Name:</label></td>
-				<td><input type="text" name="username" size="25"></td>
+				<td><label for="lblusername" class="register_label">Name:</label></td>
+				<td><input type="text" name="username" class="register_input"></td>
 			</tr>
 			
 			<tr>
-				<td><label for="lblemail">Email:</label></td>
-				<td><input type="email" name="email" size="25"><br></td>
+				<td><label for="lblemail"  class="register_label">Email:</label></td>
+				<td><input type="email" name="email" class="register_input"><br></td>
 			</tr>
 			
 			<tr>
-				<td><label for="lblpassword">Password:</label></td>
-				<td><input type="password" name="password" size="27"></td>
+				<td><label for="lblpassword"  class="register_label">Password:</label></td>
+				<td><input type="password" name="password" class="register_input"></td>
 			</tr>
 			
 			<tr>
-				<td><label for="lblconfirmpassword">Confirm Password:</label></td>
-				<td><input type="password" name="confirmpassword" size="27"></td>
+				<td><label for="lblconfirmpassword"  class="register_label">Confirm Password:</label></td>
+				<td><input type="password" name="confirmpassword" class="register_input"></td>
 			</tr>
 			
 			<tr>
-				<td><label for="lbladdress">Address:</label></td>
-				<td><textarea name="address" size="25"></textarea></td>
+				<td><label for="lbladdress"  class="register_label">Address:</label></td>
+				<td><textarea name="address" class="register_input2"></textarea></td>
 			</tr>
 			
 			<tr>
@@ -127,7 +127,7 @@ if($_SESSION["login_user"]) {
 		<div class="center_title_bar">List of Users</div>
 		<?php
 			$result = select_All_Public_Users();
-				echo "<table border='1'>";
+				echo "<table class=\"rwd-table\">";
 				echo "<tr><th>Name</th><th>Email</th><th>Password</th><th>Address</th><th>Display Picture</th>   </tr>"; 
 
 				while(list($a,$b,$c,$d,$e)=pg_fetch_array($result))
