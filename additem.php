@@ -11,6 +11,10 @@
 	include("includes/header.php");
 
 
+	if(!isset($_SESSION["login_user"])){
+		header("location: loginpage.php");
+		exit();
+	}
 	
 ?>
 
