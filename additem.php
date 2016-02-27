@@ -1,15 +1,8 @@
-
-
 <?php
-
-	$dbconn = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=p@ssword")
-	or die('Could not connect:' . pg_last_error());
-	session_start();
 
 	$page_title = "Add Item";
 	
 	include("includes/header.php");
-
 
 	if(!isset($_SESSION["login_user"])){
 		header("location: loginpage.php");
@@ -17,68 +10,11 @@
 	}
 	
 ?>
-
-
-<body>
-
-<div id="main_container">
-  <div id="header">
-    <div class="top_right">
-      <div class="languages">
-        <div class="lang_text">Languages:</div>
-        <a href="#" class="lang"><img src="images/en.gif" alt="" border="0" /></a> <a href="#" class="lang"><img src="images/de.gif" alt="" border="0" /></a> </div>
-      <div class="big_banner"> <a href="#"><img src="images/banner728.jpg" alt="" border="0" /></a> </div>
-    </div>
-    <div id="logo"> <a href="#"><img src="images/logo.png" alt="" border="0" width="182" height="85" /></a> </div>
-  </div>
-  <div id="main_content">
-    <div id="menu_tab">
-      <ul class="menu">
-        <li><a href="#" class="nav"> Home </a></li>
-        <li class="divider"></li>
-        <li><a href="#" class="nav">Products</a></li>
-        <li class="divider"></li>
-        <li><a href="#" class="nav">Specials</a></li>
-        <li class="divider"></li>
-        <li><a href="#" class="nav">My account</a></li>
-        <li class="divider"></li>
-        <li><a href="#" class="nav">Sign Up</a></li>
-        <li class="divider"></li>
-        <li><a href="#" class="nav">Shipping </a></li>
-        <li class="divider"></li>
-        <li><a href="contact.html" class="nav">Contact Us</a></li>
-        <li class="divider"></li>
-        <li><a href="details.html" class="nav">Details</a></li>
-      </ul>
-    </div>
-    <!-- end of menu tab -->
-    <div class="crumb_navigation"> Navigation: <span class="current">Home</span> </div>
-    <div class="left_content">
-      <div class="title_box">Categories</div>
-      <ul class="left_menu">
-        <li class="odd"><a href="#">Book</a></li>
-        <li class="even"><a href="#">Tools</a></li>
-        <li class="odd"><a href="#">Furniture</a></li>
-        <li class="even"><a href="#">Appliance</a></li>
-      </ul>
-      <div class="title_box">Special Products</div>
-      <div class="border_box">
-        <div class="product_title"><a href="#">Makita 156 MX-VL</a></div>
-        <div class="product_img"><a href="#"><img src="images/p1.jpg" alt="" border="0" /></a></div>
-        <div class="prod_price"><span class="reduce">350$</span> <span class="price">270$</span></div>
-      </div>
-      <div class="title_box">Newsletter</div>
-      <div class="border_box">
-        <input type="text" name="newsletter" class="newsletter_input" value="your email"/>
-        <a href="#" class="join">subscribe</a> </div>
-      <div class="banner_adds"> <a href="#"><img src="images/bann2.jpg" alt="" border="0" /></a> </div>
-    </div>
-    <!-- end of left content -->
     <div class="center_content">
       <div class="center_title_bar">Add Item</div>
 	   <!--Add item form>-->
 
-      <form action="additem.php" method="post">
+      <form method="post">
 				Item Name: <input type="text" name="itemName" id="itemName">
 				<br><br>
 				Item Picture: <input type="file" name="itemPic" id="itemPic">

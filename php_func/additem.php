@@ -23,6 +23,8 @@
 
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 
+		echo "<br><br>Success!";
+
 		pg_free_result($result);
 
 	}
