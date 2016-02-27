@@ -85,24 +85,57 @@ function select_OnLoan_Items($email){
 	function admin_insert_New_Item(){
 		session_start();
 		
-		$cat = $_POST["formItemCategory"];
-		$name = $_POST["itemname"];
-		$desc = $_POST["itemDesc"];
-		$shareType = $_POST["shareType"];
-		$owner = $_POST["formOwners"];
-		$query = 'INSERT INTO item (item_name, description, availability, loanSetting, owner, category) VALUES(
-		\'' . $name . '\', \'' . $desc . '\', \'TRUE\', \'' . strtoupper($shareType)
-		. '\', \'' . $owner . '\' , \'' . $cat . '\');';
-		$result = pg_query($query);
-	
-		if(!$result){
-			$_SESSION["admin_Insert_Item_Result"] = "Failed to add.";
-			
+		$target_dir = "../images/";
+		$target_file = $target_dir . $_POST["formOwners"] . "_" . basename($_FILES["imageToUpload"]["name"]);
+		$uploadOk = 1;
+		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+
+		// Check if image file is a actual image or fake image
+		$check = getimagesize($_FILES["imageToUpload"]["tmp_name"]);
+		if($check !== false) {
+			echo "File is an image - " . $check["mime"] . ".";
+			$uploadOk = 1;
+		} else {
+			echo "File is not an image.";
+			$uploadOk = 0;
 		}
-		else{
-			$_SESSION["admin_Insert_Item_Result"] = "Successfully added.";
+		
+		// Check if file already exists
+		if (file_exists($target_file)) {
+			$_SESSION["admin_Insert_Item_Result"] =  "Sorry, this image name already exists. Please rename and upload again.";
+			$uploadOk = 0;
+		 } 
+		
+		// Check if $uploadOk is set to 0 by an error
+		if ($uploadOk != 0) {
+			if (move_uploaded_file($_FILES["imageToUpload"]["tmp_name"], $target_file)) {
+				//success upload
+				//$_SESSION["admin_Insert_Item_Result"] =  "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+			} else {
+				$_SESSION["admin_Insert_Item_Result"] =  "Sorry, there was an error uploading your file.";
+				$uploadOk = 0;
+			}
 		}
-	
+		
+		if($uploadOk != 0){
+			$cat = $_POST["formItemCategory"];
+			$name = $_POST["itemname"];
+			$desc = $_POST["itemDesc"];
+			$shareType = $_POST["shareType"];
+			$owner = $_POST["formOwners"];
+			$query = 'INSERT INTO item (item_name, description, availability, loanSetting, owner, category, item_pic) VALUES(
+			\'' . $name . '\', \'' . $desc . '\', \'TRUE\', \'' . strtoupper($shareType)
+			. '\', \'' . $owner . '\' , \'' . $cat . '\' , \'' . $owner . "_" . basename($_FILES["imageToUpload"]["name"]) . '\');';
+			$result = pg_query($query);
+		
+			if(!$result){
+				$_SESSION["admin_Insert_Item_Result"] = "Failed to add.";
+				
+			}
+			else{
+				$_SESSION["admin_Insert_Item_Result"] = "Successfully added.";
+			}
+		}
 		header("Location: ../admin_manage_items.php");
 	}
 	

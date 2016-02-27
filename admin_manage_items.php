@@ -55,7 +55,7 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 	<!-- Insert form here -->
     <div class="center_content">
       <div class="center_title_bar">New Item</div>
-	   <form action="php_func\functions.php" method="post">
+	   <form action="php_func\functions.php" method="post" enctype="multipart/form-data">
 	   
 		<table width="90%" align="center">
 			<tr>
@@ -113,6 +113,12 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 							}
 						?>
 					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="lblImage class"register_label">Choose an image</label></td>
+				<td>
+					<input type="file" name="imageToUpload" id="imageToUpload" accept="image/*">
 				</td>
 			</tr>
 			<tr>
