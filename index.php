@@ -5,7 +5,7 @@ session_start();
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Tools Shop</title>
+<title>Carou-Share</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <!--[if IE 6]>
@@ -27,29 +27,55 @@ session_start();
   <div id="main_content">
     <div id="menu_tab">
       <ul class="menu">
-        <li><a href="#" class="nav"> Home </a></li>
+        <li><a href="/" class="nav"> Home </a></li>
         <li class="divider"></li>
-        <li><a href="mylistings.php" class="nav">My Listing</a></li>
-        <li class="divider"></li>
+		<?php
+			if($_SESSION["login_user"]) {
+				echo '<li><a href="mylistings.php" class="nav">My Listing</a></li>';
+				echo '<li class="divider"></li>';
+			}
+		?>
         <li><a href="mybiditems.php" class="nav">Bidding</a></li>
         <li class="divider"></li>
-		<li><a href="additem.php" class="nav">Add Item</a></li>
-        <li class="divider"></li>
-        <li><a href="logout.php" class="nav">Logout</a></li>
+		<?php
+			if($_SESSION["login_user"]) {
+				echo '<li><a href="additem.php" class="nav">Add Item</a></li>';
+				echo '<li class="divider"></li>';
+			}
+		?>
+		<?php
+			if($_SESSION["login_user"]) {
+				echo '<li><a href="logout.php" class="nav">Logout</a></li>';
+			}
+			else{
+				echo '<li><a href="loginpage.php" class="nav">Login</a></li>';
+			}
+		?>
+        
         <li class="divider"></li>
         <li><a href="register.php" class="nav">Sign Up</a></li>
         <li class="divider"></li>
+
       </ul>
     </div>
     <!-- end of menu tab -->
-    <div class="crumb_navigation"> Navigation: <span class="current">Home</span> </div>
+    <div class="crumb_navigation"> Navigation: <span class="current">Home</span>
+			<?php
+			if($_SESSION["login_user"]) {
+				echo '      Signed in as ' . $_SESSION["login_name"] ;
+			}
+		?>
+	</div>
     <div class="left_content">
       <div class="title_box">Categories</div>
       <ul class="left_menu">
-        <li class="odd"><a href="#">Book</a></li>
+        <li class="odd"><a href="#">Books</a></li>
         <li class="even"><a href="#">Tools</a></li>
-        <li class="odd"><a href="#">Furniture</a></li>
-        <li class="even"><a href="#">Appliance</a></li>
+        <li class="odd"><a href="#">Furnitures</a></li>
+        <li class="even"><a href="#">Appliances</a></li>
+		<li class="odd"><a href="#">Home Maintenance</a></li>
+        <li class="even"><a href="#">Personal Care</a></li>
+		<li class="odd"><a href="#">Arts and Crafts</a></li>
       </ul>
       <div class="title_box">Special Products</div>
       <div class="border_box">
@@ -63,23 +89,14 @@ session_start();
     </div>
     <!-- end of left content -->
     <div class="center_content">
-      <div class="oferta"> <img src="images/p1.png" width="165" height="113" border="0" class="oferta_img" alt="" />
+      <div class="oferta">
         <div class="oferta_details">
-          <div class="oferta_title">Power Tools BST18XN Cordless</div>
-          <div class="oferta_text"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco </div>
+          <div class="oferta_title">Welcome to Carou-Share</div>
+          <div class="oferta_text"> We would like to share our items to our friends including around the neighbourhood. To do that, we designed this site to cater your needs to put your items in good use.  </div>
           <a href="#" class="prod_buy">details</a> </div>
       </div>
       <div class="center_title_bar">Latest Products</div>
-	  <?php
-		if($_SESSION["login_user"]) {
-		?>
-		Welcome <?php echo $_SESSION["login_name"]; ?>. Click here to <a href="logout.php" tite="Logout">Logout. </a>
-		<?php
-		}
-		else {
-			header("location: loginpage.php");
-		}
-		?>
+	  
 	  
 	  
 		<?php
@@ -90,9 +107,10 @@ session_start();
 		$result = select_All_Items();
 		
 		if(pg_num_rows($result) > 0){
-			while ($row = pg_fetch_row($result)){
-				echo '<div class="prod_box">' . '<div class="center_prod_box">' . '<div class="product_title"><a href="#">' . $row[0] .
-				'</a></div>' . '</div></div>' ;
+			while(list($id,$iName,$iDesc,$iAvail,$iLoanT, $iCat, $iImage, $iOwner)=pg_fetch_array($result)){
+				echo '<div class="prod_box">' . '<div class="center_prod_box">' . '<div class="product_title"><a href="#">' . $iName . '</a></div>';
+				echo '<div class="product_img"><a href="#"><img src="images/' . $iImage . '" border="0" width="100" height="100" /></a></div>';
+				echo '</div></div>';
 			}
 		}
 		else{
