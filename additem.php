@@ -18,11 +18,8 @@
 	
 ?>
 
+
 <body>
-
-
-
-
 
 <div id="main_container">
   <div id="header">
@@ -80,13 +77,8 @@
     <div class="center_content">
       <div class="center_title_bar">Add Item</div>
 	   <!--Add item form>-->
-			<?php
 
-			if (!isset($_SESSION['login_user'])) {
-				echo "You are not logged in. Log in to add an item.";
-			}
-			?>
-			<form>
+      <form action="additem.php" method="post">
 				Item Name: <input type="text" name="itemName" id="itemName">
 				<br><br>
 				Item Picture: <input type="file" name="itemPic" id="itemPic">
@@ -96,49 +88,25 @@
 				<textarea name="itemDesc" id="itemDesc" rows="5"></textarea>
 				<br><br>
 				<select name="itemCat" id="itemCat"> <option value="">Item Category</option> 
-				<?php
-					$query = 'SELECT DISTINCT name, catid FROM category';
-					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
-					while($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-						$c_id = $row['catid'];
-						echo "<option value=\"".$c_id."\">".$row['name']."</option><br>";
-					}
-					pg_free_result($result);
-				?>
+  				<?php
+  					$query = 'SELECT DISTINCT name, catid FROM category';
+  					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+  					while($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+  						$c_id = $row['catid'];
+  						echo "<option value=\"".$c_id."\">".$row['name']."</option><br>";
+  					}
+  					pg_free_result($result);
+  				?>
 				</select>		
 				<br><br>
 				<input type="radio" name="loanSetting" id="loanSetting_share" value="SHARE">Share
 				<input type="radio" name="loanSetting" id="loanSetting_rent" value="BID">Bid
 				<br><br>
 				<input type="submit" name="formSubmit" value="Submit" >
+         <?php
+          include_once('php_func\additem.php');
+        ?>
 			</form>
-
-			<?php
-				include('login.php');
-				include('php_func/functions.php');
-
-				$owner = $_SESSION['login_user'];
-
-				if (isset($_GET['formSubmit'])) {
-
-					$query = "INSERT INTO item (itemID, item_name, description, availability, loansetting, owner, category) 
-					VALUES ( (SELECT COUNT(*) FROM item),
-						'".$_GET['itemName']."',
-						'".$_GET['itemDesc']."',
-						true,
-						'".$_GET['loanSetting']."', 
-						'".$owner."', 
-						". intval($_GET['itemCat']) .")";
-					echo $query;
-
-					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
-
-					pg_free_result($result);
-
-				}
-
-				pg_close($dbconn);
-			?> 
     </div>
     <!-- end of center content -->
     <div class="right_content">
