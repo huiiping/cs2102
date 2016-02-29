@@ -14,16 +14,16 @@
       <div class="center_title_bar">Add Item</div>
 	   <!--Add item form>-->
 
-      <form method="post">
-				Item Name: <input type="text" name="itemName" id="itemName">
+      <form method="post" enctype="multipart/form-data">
+				<label>Item Name:</label> <input type="text" name="itemName" id="itemName">
 				<br><br>
-				Item Picture: <input type="file" name="itemPic" id="itemPic">
+				<label>Item Picture:</label> <input type="file" name="itemPic" id="itemPic" accept="image/*">
 				<br><br>
-				Item Description:
+				<label>Item Description:</label>
 				<br>
 				<textarea name="itemDesc" id="itemDesc" rows="5"></textarea>
 				<br><br>
-				<select name="itemCat" id="itemCat"> <option value="">Item Category</option> 
+				<label>Item Category:</label><select name="itemCat" id="itemCat">
   				<?php
   					$query = 'SELECT DISTINCT name, catid FROM category';
   					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -41,6 +41,11 @@
 				<input type="submit" name="formSubmit" value="Submit" >
          <?php
           include_once('php_func\additem.php');
+        ?>
+        <?php
+
+          echo "<br><br>".$_SESSION["addItemErrorMsg"]."";
+
         ?>
 			</form>
     </div>
