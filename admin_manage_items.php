@@ -116,7 +116,7 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
 				</td>
 			</tr>
 			<tr>
-				<td><label for="lblImage class"register_label">Choose an image</label></td>
+				<td><label for="lblImage" class"register_label">Choose an image</label></td>
 				<td>
 					<input type="file" name="imageToUpload" id="imageToUpload" accept="image/*">
 				</td>
