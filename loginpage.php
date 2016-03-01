@@ -1,6 +1,6 @@
 <?php
 
-	$page_title = "Add Item";
+	$page_title = "Login";
 	
 	include("includes/header.php");
 

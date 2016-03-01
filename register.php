@@ -23,7 +23,14 @@
   <div id="main_content">
     <div id="menu_tab">
       <ul class="menu">
-        <li><a href="logout.php" class="nav">Logout</a></li>
+        <?php
+			if($_SESSION["login_user"]) {
+				echo '<li><a href="logout.php" class="nav">Logout</a></li>';
+			}
+			else{
+				echo '<li><a href="loginpage.php" class="nav">Login</a></li>';
+			}
+		?>
         <li class="divider"></li>
         <li><a href="register.php" class="nav">Sign Up</a></li>
         <li class="divider"></li>
