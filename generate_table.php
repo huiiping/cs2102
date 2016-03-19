@@ -32,6 +32,8 @@ function create_Item_Table(){
 			owner VARCHAR(256),
 			category INT,
 			item_pic VARCHAR(256),
+			pickupLocation VARCHAR(256),
+			returnLocation VARCHAR(256),
 			FOREIGN KEY (owner) REFERENCES users(email) ON DELETE CASCADE,
 			FOREIGN KEY (category) REFERENCES category(catId) ON DELETE CASCADE);';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -86,6 +88,33 @@ function create_Review_Table(){
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
 
+/*owner and borrower are emails*/
+function create_Rating_Table(){
+	$query = 'CREATE TABLE rating(
+			itemID INT,
+			owner VARCHAR(256),
+			borrower VARCHAR(256),
+			score INT CHECK(score >= 1 OR score <=5),
+			PRIMARY KEY (itemID, owner, borrower),
+			FOREIGN KEY (owner) REFERENCES users(email) ON DELETE CASCADE,
+			FOREIGN KEY (borrower) REFERENCES users(email) ON DELETE CASCADE,
+			FOREIGN KEY (itemID) REFERENCES item(itemID) ON DELETE CASCADE);';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
+/*Allow owner to set up the item bidding*/
+function create_Item_To_Bid_Table(){
+	$query = 'CREATE TABLE item_to_bid(
+			itemID INT,
+			startDate Timestamp,
+			endDate Timestamp ,
+			loanBegin Date,
+			loanReturn Date,
+			PRIMARY KEY (itemID, startDate),
+			FOREIGN KEY (itemID) REFERENCES item(itemID) ON DELETE CASCADE);';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
 function insert_New_Cat(){
 	$query = 'INSERT INTO category (name) VALUES (\'Appliances\'), (\'Home Maintenance\'), (\'Personal Care\'), (\'Books\'), (\'Arts and Crafts\');';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -126,7 +155,9 @@ create_Item_Table();
 create_Bid_Table();
 create_Loan_Table();
 create_Preference_Table();
-create_Review_Table();
+//create_Review_Table();
+create_Rating_Table();
+create_Item_To_Bid_Table();
 insert_New_Cat();
 insert_Admin();
 insert_Users();
