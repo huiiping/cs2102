@@ -28,6 +28,47 @@
 		  <li><a href="#borroweditems">Borrowed Items</a></li>
 		  <li><a href="#biditems">Bid Items</a></li>
 		</ul>
+		
+		<div class="tabContent" id="biditems">
+		  <div>
+			<p>Showing a list of Bid Items:</p>
+			<p>- Current Bids</p>
+			<p>- History of Bidding</p>
+		  </div>
+		  
+		   <div class="center_title_bar">Current Bids</div>
+		  <?php
+			$result = select_Current_Bidding_Items($_SESSION["login_user"]);
+			
+			if(pg_num_rows($result) > 0){
+				while ($row = pg_fetch_row($result)){
+					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[4] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[0] . nl2br("\n Bid ID: ") . $row[1] . nl2br("\n Bid Amt: ") . $row[2] . nl2br("\n Bidder: ") . $row[3] . nl2br("\n Last Bid Date: ") . $row[5] .
+					'</a></div>' . '</div></div>' ;
+				}
+			}
+			else{
+				echo 'Sorry, no item found.';
+			}
+		  ?>
+		  
+		  <div class="center_title_bar">History of Bidding</div>
+		  <?php
+			$result = select_Current_Bidding_Items($_SESSION["login_user"]);
+			
+			if(pg_num_rows($result) > 0){
+				while ($row = pg_fetch_row($result)){
+					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[4] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[0] . nl2br("\n Bid ID: ") . $row[1] . nl2br("\n Bid Amt: ") . $row[2] . nl2br("\n Bidder: ") . $row[3] . nl2br("\n Last Bid Date: ") . $row[5] .
+					'</a></div>' . '</div></div>' ;
+				}
+			}
+			else{
+				echo 'Sorry, no item found.';
+			}
+		  ?>
+		  
+		</div>
+		
+		
 
 		<div class="tabContent" id="personalitems">
 		  <div>
@@ -37,7 +78,6 @@
 			<p>- History of Loans</p>
 		  </div>
 		  
-		  <br>
 		  <div class="center_title_bar">Personal Items - AVAILABLE</div>
 		
 			<?php
@@ -54,7 +94,6 @@
 			}
 			?>
 		  
-		  <br>
 		  <div class="center_title_bar">Personal Items - ON LOAN</div>
 			<?php
 			$result = select_OnLoan_Items($_SESSION["login_user"]);
@@ -70,11 +109,11 @@
 			}
 			?>
 		  
-		  <br>
 		  <div class="center_title_bar">History of Loans</div>
 		  
 		</div>
-
+		
+		
 		<div class="tabContent" id="borroweditems">
 		  <div>
 			<p>Showing a list of Borrowed Items:</p>
@@ -82,7 +121,7 @@
 			<p>- History of Borrowed Items</p>
 		  </div>
 		  
-		 <br>
+
 		 <div class="center_title_bar">Still Borrowing</div>
 			<?php
 			$result = select_Borrowed_Items($_SESSION["login_user"]);
@@ -98,7 +137,6 @@
 			}
 		  ?>
 		
-		<br>
 		<div class="center_title_bar">History of Borrowed Items</div>
 			<?php
 			$result = select_History_Of_Borrowed_Items($_SESSION["login_user"]);
@@ -113,50 +151,8 @@
 				echo 'Sorry, no item found.';
 			}
 		  ?> 
-		  
-		  
 		</div>
-
-		<div class="tabContent" id="biditems">
-		  <div>
-			<p>Showing a list of Bid Items:</p>
-			<p>- Current Bids</p>
-			<p>- History of Bidding</p>
-		  </div>
-		  
-		 <br>
-		 <div class="center_title_bar">Current Bids</div>
-		  <?php
-			$result = select_Current_Bidding_Items($_SESSION["login_user"]);
-			
-			if(pg_num_rows($result) > 0){
-				while ($row = pg_fetch_row($result)){
-					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[4] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[0] . nl2br("\n Bid ID: ") . $row[1] . nl2br("\n Bid Amt: ") . $row[2] . nl2br("\n Bidder: ") . $row[3] . nl2br("\n Last Bid Date: ") . $row[5] .
-					'</a></div>' . '</div></div>' ;
-				}
-			}
-			else{
-				echo 'Sorry, no item found.';
-			}
-		  ?>
-		  
-		<br>  
-		<div class="center_title_bar">History of Bidding</div>
-		  <?php
-			$result = select_History_Of_Bidding_Items($_SESSION["login_user"]);
-			
-			if(pg_num_rows($result) > 0){
-				while ($row = pg_fetch_row($result)){
-					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[4] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[0] . nl2br("\n Bid ID: ") . $row[1] . nl2br("\n Bid Amt: ") . $row[2] . nl2br("\n Bidder: ") . $row[3] . nl2br("\n Last Bid Date: ") . $row[5] .
-					'</a></div>' . '</div></div>' ;
-				}
-			}
-			else{
-				echo 'Sorry, no item found.';
-			}
-		  ?>
-		</div>
-
+	
 	</div>
 <!-- end of center content -->
 

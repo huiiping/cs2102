@@ -151,13 +151,13 @@ background:url(images/box_bottom_bg.gif) no-repeat center bottom;
 .product_title{
 color:#ff8a00;
 padding:5px 0 5px 0;
-font-weight:bold;
+font-weight:;
 }
 .product_title a{
 text-decoration:none;
 color:#ff8a00;
 padding:5px 0 5px 0;
-font-weight:bold;
+font-weight:;
 }
 .product_title a:hover{
 color:#064E5A;
