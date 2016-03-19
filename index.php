@@ -21,18 +21,23 @@
 		include 'php_func\functions.php';
 		
 		
-		$result = select_All_Items();
+		$result = select_Available_Bid_Items();
 		
 		if(pg_num_rows($result) > 0){
-			while(list($id,$iName,$iDesc,$iAvail,$iLoanT, $iCat, $iImage, $iOwner)=pg_fetch_array($result)){
-				echo '<div class="prod_box">' . '<div class="center_prod_box">' . '<div class="product_title"><a href="#">' . $iName . '</a></div>';
-				echo '<div class="product_img"><a href="#"><img src="images/' . $iImage . '" border="0" width="100" height="100" /></a></div>';
-				echo '</div></div>';
+				while ($row = pg_fetch_row($result)){
+					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[5] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[1] . nl2br("\n Description: ") . $row[2] . nl2br("\n Owner: ") . $row[3] . nl2br("\n Pickup Location: ") . $row[6] . nl2br("\n Return Location: ") . $row[7] .
+					'</a></div>' . '</div></div>' ;
+					
+					echo "<td><a href='bid.php?itemID=$row[0]' class=\"submit_btn\">Bid</a></td>";
+				}
 			}
-		}
-		else{
-			echo 'Sorry, no item found.';
-		}
+			else{
+				echo 'Sorry, no item found.';
+			}
+		
+		
+		
+		
 	  ?>
 
     </div>

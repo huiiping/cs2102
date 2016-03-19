@@ -45,6 +45,15 @@ function select_OnLoan_Items($email){
 		return $result;
 	}
 	
+	function select_Available_Bid_Items(){
+		$query = 'SELECT i.itemID, i.item_name, i.description, i.owner, c.name, i.item_pic, i.pickuplocation, i.returnlocation 
+		FROM item i, category c 
+		WHERE i.category=c.catId AND i.availability='TRUE' AND i.loansetting = 'BID';';
+		$result = pg_query($query);
+	
+		return $result;
+	}
+	
 	function select_All_Categories(){
 		$query = 'SELECT * FROM category;';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
