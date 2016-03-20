@@ -143,25 +143,17 @@
 			$result = select_Borrowed_Items($_SESSION["login_user"]);
 			
 			if(pg_num_rows($result) > 0){
+		
 				while ($row = pg_fetch_row($result)){
 						echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[3] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[0] . nl2br("\n Bid ID: ") . $row[1] . nl2br("\n Borrower: ") . $row[2] . nl2br("\n Begin: ") . $row[4] . nl2br("\n End: ") . $row[5] .
+					"<br><br>" .
+					"<Input type = 'Radio' Name ='ratings' value= '1'>1" . 
+					"<Input type = 'Radio' Name ='ratings' value= '2'>2" .
+					"<Input type = 'Radio' Name ='ratings' value= '3'>3" .
+					"<Input type = 'Radio' Name ='ratings' value= '4'>4" .
+					"<Input type = 'Radio' Name ='ratings' value= '5'>5" .
+					"<td><a href='ratings.php?itemID=$row[6]&owner=$row[7]&borrower=$row[2]&rating=$row[1]' class=\"submit_btn\">Rate</a></td>" .
 					'</a></div>' . '</div></div>' ;
-					
-				echo "<FORM name ="form1" method ="post" action ="ratings.php">";
-
-					echo "<Input type = 'Radio' Name ='ratings' value= '1'>1";
-					echo "<Input type = 'Radio' Name ='ratings' value= '2'>2";
-					echo "<Input type = 'Radio' Name ='ratings' value= '3'>3";
-					echo "<Input type = 'Radio' Name ='ratings' value= '4'>4";
-					echo "<Input type = 'Radio' Name ='ratings' value= '5'>5";
-
-					<P>
-					echo "<Input type = "Submit" Name = "Submit1" VALUE = "Rate">";
-
-				echo "</FORM>";	
-				
-				echo "<td><a href='ratings.php?itemID=$row[6]&ratings=$_POST['ratings']' class=\"submit_btn\">Rate</a></td>";
-				
 				}
 			}
 			else{
