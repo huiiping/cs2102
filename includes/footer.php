@@ -1,8 +1,10 @@
     <div class="right_content">
       <div class="title_box">Search</div>
       <div class="border_box">
-        <input type="text" name="newsletter" class="newsletter_input" value="keyword"/>
-        <a href="#" class="join">search</a> </div>
+        <input type="text" name="newsletter" id="newsletter" class="newsletter_input" value="keyword"/>
+        <a href="searchresult.php?" 
+			onclick="window.location=this.href+'newsletter='+document.getElementById('newsletter').value;return false;" 
+			class="join">search</a> </div>
       <div class="shopping_cart">
         <div class="title_box">Shopping cart</div>
         <div class="cart_details"> 3 items <br />

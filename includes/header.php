@@ -52,11 +52,15 @@
 				echo '<li><a href="loginpage.php" class="nav">Login</a></li>';
 			}
 		?>
-        
-        <li class="divider"></li>
-        <li><a href="register.php" class="nav">Sign Up</a></li>
-        <li class="divider"></li>
-
+		<li class="divider"></li>
+        <?php
+			if($_SESSION["login_user"]) {
+				echo '<li><a href="updateprofile.php" class="nav">Update Profile</a></li>';
+			} else {
+				echo '<li><a href="register.php" class="nav">Sign Up</a></li>';
+			}
+		?>
+		<li class="divider"></li>
       </ul>
     </div>
     <!-- end of menu tab -->

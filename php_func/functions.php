@@ -265,6 +265,24 @@ if(isset($_POST['admin_insert_user_submit']))
 {
 	admin_insert_New_User();
 }
+
+	function search_Results($keyword) {
+		$query = 'SELECT i.itemID, i.item_name, i.description, i.availability, i.loanSetting, c.name, i.item_pic, u.name 
+		FROM item i, users u, category c 
+		WHERE i.category=c.catId AND i.owner=u.email
+		AND (LOWER(i.item_name) LIKE LOWER(\'%' . $keyword . '%\') OR LOWER(u.name) LIKE LOWER(\'%' . $keyword . '%\'));';
+		
+		$result = pg_query($query);
+		return $result;
+	}
+
+	function update_User($name, $email, $address){
+		$query = 'UPDATE users SET name=\''. $name . '\', address=\'' . $address . '\' 
+		WHERE email=\'' . $email . '\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
 	
 //pg_close($dbconn);
 ?>
