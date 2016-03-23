@@ -46,7 +46,9 @@ function create_Bid_Table(){
 			itemID INT,
 			bidder VARCHAR(256),
 			dateLastBid DATE,
+			startDate Timestamp,
 			FOREIGN KEY (itemID) REFERENCES item(itemID) ON DELETE CASCADE,
+			FOREIGN KEY (itemID, startDate) REFERENCES item_to_bid(itemID, startDate) ON DELETE CASCADE,
 			FOREIGN KEY (bidder) REFERENCES users(email) ON DELETE CASCADE);';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
