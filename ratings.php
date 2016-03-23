@@ -15,7 +15,7 @@ $query = "INSERT INTO rating (itemid, owner, borrower, score)
 				'".$owner."',
 				'".$borrower."', 
 				'".$rating."'
-				)";
+				);";
 
 		$result = pg_query($query);
 		

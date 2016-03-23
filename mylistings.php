@@ -152,7 +152,7 @@
 					"<Input type = 'Radio' Name ='ratings' value= '3'>3" .
 					"<Input type = 'Radio' Name ='ratings' value= '4'>4" .
 					"<Input type = 'Radio' Name ='ratings' value= '5'>5" .
-					"<td><a href='ratings.php?itemID=$row[6]&owner=$row[7]&borrower=$row[2]&rating=$row[1]' class=\"submit_btn\">Rate</a></td>" .
+					"<td><a href='ratings.php?itemID=$row[6]&owner=$row[7]&borrower=" . $_SESSION["login_user"] . "&rating=$row[1]' class=\"submit_btn\">Rate</a></td>" .
 					'</a></div>' . '</div></div>' ;
 				}
 			}
