@@ -247,10 +247,28 @@ or die('Could not connect: ' . pg_last_error());
 		header("Location: ../admin_manage_items.php");
 	}
 	
-	function select_Current_Bidding_Details($itemId){
-		$query = 'SELECT i.itemID, i.item_name, i.description, i.availability, i.loansetting, i.category, i.item_pic, i.owner
-		FROM item i, users u, category c 
-		WHERE i.owner=u.email AND i.category=c.catId AND i.itemID=\'' . $itemId . '\';';
+	function select_Current_Total_Bidders($itemId, $startDate){
+		$query = 'SELECT COUNT(b.bidID) 
+		FROM bid b 
+		WHERE b.itemID=\'' . $itemId . '\' AND b.startDate=\'' . $startDate . '\';';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		return $result;
+	}
+	
+	function select_Current_Highest_Bidder($itemId, $startDate){
+		$query = 'SELECT MAX(b.bidAmt) 
+		FROM bid b 
+		WHERE b.itemID=\'' . $itemId . '\' AND b.startDate=\'' . $startDate . '\';';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		return $result;
+	}
+	
+	function select_Current_Bid($itemId, $startDate, $bidder){
+		$query = 'SELECT b.bidAmt 
+		FROM bid b 
+		WHERE b.itemID=\'' . $itemId . '\' AND b.startDate=\'' . $startDate . '\' AND b.bidder=\'' . $bidder . '\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 		
 		return $result;

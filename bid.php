@@ -11,6 +11,11 @@
 	else{
 		header("location: loginpage.php");
 	}
+	
+	// if(!isset($_GET['itemID']) || !isset($_GET['startDate'])){
+		// header("location: index.php");
+	// }
+	
 ?>
     <div class="center_content">
       <div class="oferta">
@@ -21,47 +26,113 @@
       </div>
       <div class="center_title_bar">Place your Bid</div>
 	  
+		
+		<div>Bidding will close in <span id="time"></span></div>
+	  
+		
+		<script>
+		
+		function startTimer(duration, display) {
+			var timer = duration, minutes, seconds;
+			setInterval(function () {
+				minutes = parseInt(timer / 60, 10)
+				seconds = parseInt(timer % 60, 10);
+
+				minutes = minutes < 10 ? "0" + minutes : minutes;
+				seconds = seconds < 10 ? "0" + seconds : seconds;
+
+				display.textContent = minutes + ":" + seconds;
+
+				if (--timer < 0) {
+					timer = 0;
+				}
+			}, 1000);
+		}
+
+		window.onload = function () {
+			var fiveMinutes = 60 * 1,
+				display = document.querySelector('#time');
+				display.style.fontSize = "30px";
+			startTimer(fiveMinutes, display);
+		};
+
+
+		</script>
 	  <?php
-			$result = select_Current_Bidding_Details($_GET['itemID']);
-			echo "<table class=\"rwd-table\">";
-			echo "<tr><th>Item</th><th>No. of bidders</th><th>Highest Bid</th><th>Your Bid</th><th></th></tr>"; 
-
-			while(list($id,$iName,$iDesc,$iAvail,$iLoanT, $iCat, $iImage, $iOwner)=pg_fetch_array($result))
+			include 'php_func\functions.php';
+			//$getTotalBidders = select_Current_Total_Bidders($_GET['itemID'], $_GET['startDate']);
+			//$getHighestBidder = select_Current_Highest_Bidder($_GET['itemID'], $_GET['startDate']);
+			//$getCurrentBid = select_Current_Bid($_GET['itemID'], $_GET['startDate'], $_SESSION["login_user"]);
+			
+			$getTotalBidders = select_Current_Total_Bidders('1', '2016-03-21 00:36:38');
+			$getHighestBidder = select_Current_Highest_Bidder('1', '2016-03-21 00:36:38');
+			$getCurrentBid = select_Current_Bid('1', '2016-03-21 00:36:38', $_SESSION["login_user"]);
+			
+			
+			
+			
+			extract($_POST); 
+			if($upd)
 			{
-
-			echo "<tr>";    echo "<td>".$iName."</td>";
-
-			echo "<td>".$iDesc."</td>";
-
-			echo "<td>";
-			if ($iAvail == "t"){
-				echo "YES";
-			}else{
-				echo "NO";
+				//update_Bid($_GET['itemID'], $_GET['startDate'], $currentBid);
+				header('location:index.php');
 			}
-			echo "</td>";
+			//echo "<table class=\"rwd-table\">";
+			//echo "<tr><th>Item</th><th>No. of bidders</th><th>Highest Bid</th><th>Your Bid</th><th></th></tr>"; 
 
-			echo "<td>".$iLoanT."</td>";
 			
-			echo "<td>".$iCat."</td>";
+
+			// echo "<tr>";    echo "<td>".$_GET['itemID']."</td>";
+
+			// echo "<td>".$totalBidders."</td>";
+
+			// echo "<td>".$highestBid."</td>";
 			
-			echo "<td>";
-			echo '<img src="images/';
-			echo $iImage;
-			echo '" alt="" border="0" width="100" height="100" />';
-			echo "</td>";
-			
-			echo "<td>".$iOwner."</td>";
+			// echo "<td>".$currentBid."</td>";
 
-			echo "<td><a href='admin_edit_item.php?itemID=$id' class=\"submit_btn\">Edit</a>    <a href='admin_remove_item.php?itemID=$id' class=\"submit_btn\">Delete</a></td>";
+			// echo "<td><a href='update_bid.php?itemID=$id' class=\"submit_btn\">Edit</a>    <a href='admin_remove_item.php?itemID=$id' class=\"submit_btn\">Delete</a></td>";
 
-			echo "</tr>";    
+			// echo "</tr>";    
 
-			}
-
-			echo "</table>";
+			// echo "</table>";
 		?>
+		<form method="post" enctype="multipart/form-data">
+			<table class="rwd-table">
+			<tr><th>Item</th><th>No. of bidders</th><th>Highest Bid</th><th>Your Bid</th><th></th></tr>
+			<tr>
+				<td>
+					<?php
+						echo $_GET['itemID'];
+					?>
+				</td>
+				<td>
+					<?php
+						list($totalBidders)=pg_fetch_array($getTotalBidders);
+						if($totalBidders > 0)
+							echo $totalBidders;
+						else
+							echo "0";
+					?>
+				</td>
+				<td>
+					<?php
+						list($highestBid) = pg_fetch_array($getHighestBidder);
+						if($highestBid > 0.0)
+							echo $highestBid;
+						else
+							echo "0.0";
+					?>
+				</td>
+				<td>
+					<input type="text" name="currentBid" size="10" required placeholder="Enter Bid" width="60px" value="<?php list($currentBid) = pg_fetch_array($getCurrentBid); echo $currentBid;?>">
+				</td>
 
+				<td colspan="2" align="center" ><input type="submit" value="Bid" name="upd"/>
+				<input type="button" name="cancel" value="Cancel" onclick="window.location='admin_manage_items.php'" />
+				</td>
+			</tr>
+			</table>
+		</form>
     </div>
     <!-- end of center content -->
     <div class="right_content">
