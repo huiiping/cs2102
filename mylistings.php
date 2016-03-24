@@ -102,7 +102,11 @@
 			if(pg_num_rows($result) > 0){
 				while ($row = pg_fetch_row($result)){
 					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[4] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[0] . nl2br("\n Description: ") . $row[1] . nl2br("\n Category: ") . $row[2] . nl2br("\n Owner: ") . $row[3] .
+					"<td><a href='return.php?itemID=$row[5]' class=\"submit_btn\">Return</a></td>" .
+					
 					'</a></div>' . '</div></div>' ;
+					
+					
 				}
 			}
 			else{

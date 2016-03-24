@@ -16,7 +16,7 @@ or die('Could not connect: ' . pg_last_error());
 	}
 
 	function select_OnLoan_Items($email){
-		$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where availability = \'NO\' AND i.category = c.catid AND i.owner = u.email AND i.owner = \'' . $email . '\';';
+		$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic, i.itemID FROM item i, category c, users u where availability = \'NO\' AND i.category = c.catid AND i.owner = u.email AND i.owner = \'' . $email . '\';';
 		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 	
 		return $result;
