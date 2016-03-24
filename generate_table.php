@@ -154,12 +154,13 @@ function insert_Loan(){
 create_User_Table();
 create_Category_Table();
 create_Item_Table();
+create_Item_To_Bid_Table();
 create_Bid_Table();
 create_Loan_Table();
 create_Preference_Table();
 //create_Review_Table();
 create_Rating_Table();
-create_Item_To_Bid_Table();
+
 insert_New_Cat();
 insert_Admin();
 insert_Users();
