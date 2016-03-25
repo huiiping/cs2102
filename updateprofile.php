@@ -24,6 +24,20 @@
 				<td><label class="register_label">Residential Address: </label></td>
 				<td><textarea name="address" class="register_input2" required><?php echo $row['address']; ?></textarea></td>
 			  </tr>
+			  
+			  <tr>
+				<td><label class="register_label">Current Password: </label></td>
+				<td><input type="password" name="curr_password" class="register_input" required /></td>
+			  </tr>
+			  <tr>
+				<td><label class="register_label">New Password: </label></td>
+				<td><input type="password" name="new_password" class="register_input" required /></td>
+			  </tr>
+			  <tr>
+				<td><label class="register_label">Confirm Password: </label></td>
+				<td><input type="password" name="con_password" class="register_input" required /></td>
+			  </tr>
+			  			  
 			  <tr>
 				<td></td>
 				<td height="100px" align="center">
@@ -36,12 +50,30 @@
 	include_once('php_func\functions.php');
 	
 	if (isset($_POST['submit'])) { 
-		$name = pg_escape_string($_POST['name']);
+	
+		$errormsg = "";
 		$email = $row['email'];
-		$address = pg_escape_string($_POST['address']);
 		
-		update_User($name, $email, $address);
-		header("Location: /index.php");
+		//Prompt error if email is duplicated
+		$result = match_Password($email, $_POST['curr_password']);
+		if (pg_num_rows($result) < 1) {
+			$errormsg = "Invalid password,	";
+			echo $errormsg;
+		}
+		
+		if ($_POST['new_password'] != $_POST['con_password']) { //Prompt error if password is not matched
+			$errormsg = "	Password not matched.";
+			echo $errormsg;
+		} 
+		
+		if ($errormsg == "") {
+			$name = pg_escape_string($_POST['name']);
+			$address = pg_escape_string($_POST['address']);
+			$password = pg_escape_string($_POST['new_password']);
+			
+			update_User($name, $email, $password, $address);
+			header("Location: /index.php");
+		}
 	}
 ?>
 

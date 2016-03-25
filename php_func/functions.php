@@ -46,10 +46,16 @@ or die('Could not connect: ' . pg_last_error());
 	}
 	
 	function select_Available_Bid_Items(){
-
+<<<<<<< HEAD
 		$query = 'SELECT i.itemID, i.item_name, i.description, i.owner, c.name, i.item_pic, i.pickuplocation, i.returnlocation 
 		FROM item i, category c 
 		WHERE i.category=c.catId AND i.availability=\'TRUE\';';
+=======
+
+		$query = 'SELECT i.itemID, i.item_name, i.description, i.owner, c.name, i.item_pic, i.pickuplocation, i.returnlocation, ib.startdate
+		FROM item i, category c, item_to_bid ib 
+		WHERE i.category=c.catId AND i.itemID=ib.itemID AND i.availability=\'TRUE\';';
+>>>>>>> origin/master
 		$result = pg_query($query);
 	
 		return $result;
@@ -276,14 +282,14 @@ or die('Could not connect: ' . pg_last_error());
 	}
 	
 	//Insert item to bid details
-	function insert_item_to_bid($itemId, $startDate, $endDate, $loanBegin, $loanReturn){
+	function insert_item_to_bid($itemId, $startDate, $bidPeriod, $loanBegin, $loanPeriod){
 		$convert_startDate = date_create($startDate);
-		$convert_endDate = date_create($endDate);
+		$convert_endDate = date_create($bidPeriod);
 		$convert_loanBegin = date_create($loanBegin);
-		$convert_loanReturn = date_create($loanReturn);
-		$query = 'INSERT INTO item_to_bid (itemId, startDate, endDate, loanBegin, loanReturn) VALUES(
-			\'' . $itemId . '\', \'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', \'' . date_format($convert_endDate, "Y/m/d  H:i:s")
-			. '\', \'' . date_format($convert_loanBegin, "Y/m/d") . '\' , \'' . date_format($convert_loanReturn, "Y/m/d") . '\');';
+		$convert_loanReturn = date_create($loanPeriod);
+		$query = 'INSERT INTO item_to_bid (itemId, startDate, bidPeriod, loanBegin, loanPeriod) VALUES(
+			\'' . $itemId . '\', \'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', \'' . $bidPeriod
+			. '\', \'' . date_format($convert_loanBegin, "Y/m/d") . '\' , \'' . $loanPeriod . '\');';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 		
 		if(!$result){
@@ -298,10 +304,17 @@ or die('Could not connect: ' . pg_last_error());
 	
 	//select item to bid time left for an item
 	function select_Item_To_Bid_TimeLeft($itemId, $startDate){
-		$query = 'SELECT ((DATE_PART(\'day\', startDate + INTERVAL \' \'::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
-			DATE_PART(\'hour\', startDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
-			DATE_PART(\'minute\', startDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
-			DATE_PART(\'second\', startDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
+<<<<<<< HEAD
+		$query = 'SELECT ((DATE_PART(\'day\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
+			DATE_PART(\'hour\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'minute\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'second\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
+=======
+		$query = 'SELECT ((DATE_PART(\'day\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
+			DATE_PART(\'hour\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'minute\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'second\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
+>>>>>>> origin/master
 		FROM item_to_bid 
 		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -329,9 +342,15 @@ if(isset($_POST['admin_insert_user_submit']))
 		return $result;
 	}
 
-	function update_User($name, $email, $address){
-		$query = 'UPDATE users SET name=\''. $name . '\', address=\'' . $address . '\' 
-		WHERE email=\'' . $email . '\';';
+	function match_Password($email, $password) {
+		$query = 'SELECT * FROM users where email=\'' . $email . '\' AND password=\'' . $password . '\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
+	
+	function update_User($name, $email, $password, $address){
+		$query = 'UPDATE users SET name=\''. $name . '\', password=\'' . $password . '\', address=\'' . $address .  '\' WHERE email=\'' . $email . '\';';
 		
 		$result = pg_query($query);
 		return $result;
