@@ -47,9 +47,9 @@ or die('Could not connect: ' . pg_last_error());
 	
 	function select_Available_Bid_Items(){
 
-		$query = 'SELECT i.itemID, i.item_name, i.description, i.owner, c.name, i.item_pic, i.pickuplocation, i.returnlocation 
-		FROM item i, category c 
-		WHERE i.category=c.catId AND i.availability=\'TRUE\';';
+		$query = 'SELECT i.itemID, i.item_name, i.description, i.owner, c.name, i.item_pic, i.pickuplocation, i.returnlocation, ib.startdate
+		FROM item i, category c, item_to_bid ib 
+		WHERE i.category=c.catId AND i.itemID=ib.itemID AND i.availability=\'TRUE\';';
 		$result = pg_query($query);
 	
 		return $result;
