@@ -14,6 +14,7 @@
       <div class="center_title_bar">Add Item</div>
 	   <!--Add item form>-->
 
+	  <br>
       <form method="post" enctype="multipart/form-data">
 				<label>Item Name:</label> <input type="text" name="itemName" id="itemName">
 				<br><br>
@@ -23,7 +24,7 @@
 				<br>
 				<textarea name="itemDesc" id="itemDesc" rows="5"></textarea>
 				<br><br>
-				<label>Item Category:</label><select name="itemCat" id="itemCat">
+				<label>Item Category:</label> <select name="itemCat" id="itemCat">
   				<?php
   					$query = 'SELECT DISTINCT name, catid FROM category';
   					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -35,8 +36,24 @@
   				?>
 				</select>		
 				<br><br>
-				<input type="radio" name="loanSetting" id="loanSetting_share" value="SHARE">Share
-				<input type="radio" name="loanSetting" id="loanSetting_rent" value="BID">Bid
+				<input type="radio" name="loanSetting" id="loanSetting_share" value="SHARE" onclick="hideBidSettings()">Share
+				<input type="radio" name="loanSetting" id="loanSetting_rent" value="BID" onclick="showBidSettings()">Bid
+				<br><br>
+				<div id="bidSettings" style="display:none">
+					<label>Bid will close in </label> 
+					<input type="text" size="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="bidPeriodNum">
+					<select name="bidPeriodQuantity">
+						<option value="1">day(s)</option><br>
+						<option value="7">week(s)</option>
+					</select>
+					<br><br>
+				</div>
+				<label>Return in </label>
+				<input type="text" size="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="loanPeriodNum">
+				<select name="bidPeriodQuantity">
+					<option value="1">day(s)</option><br>
+					<option value="7">week(s)</option>
+				</select>
 				<br><br>
 				<input type="submit" name="formSubmit" value="Submit" >
          <?php
@@ -56,3 +73,16 @@
   include("includes/footer.php");
 
 ?>
+
+<script>
+
+function showBidSettings() {
+	document.getElementById("bidSettings").style.display = "block";
+}
+
+function hideBidSettings() {
+	document.getElementById("bidSettings").style.display = "none";
+}
+
+
+</script>
