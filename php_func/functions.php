@@ -46,10 +46,10 @@ or die('Could not connect: ' . pg_last_error());
 	}
 	
 	function select_Available_Bid_Items(){
-
 		$query = 'SELECT i.itemID, i.item_name, i.description, i.owner, c.name, i.item_pic, i.pickuplocation, i.returnlocation, ib.startdate
 		FROM item i, category c, item_to_bid ib 
 		WHERE i.category=c.catId AND i.itemID=ib.itemID AND i.availability=\'TRUE\';';
+
 		$result = pg_query($query);
 	
 		return $result;
@@ -298,10 +298,24 @@ or die('Could not connect: ' . pg_last_error());
 	
 	//select item to bid time left for an item
 	function select_Item_To_Bid_TimeLeft($itemId, $startDate){
+<<<<<<< HEAD
 		$query = 'SELECT ((DATE_PART(\'day\', (startDate + INTERVAL bidPeriod & \' day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
 			DATE_PART(\'hour\', (startDate + INTERVAL bidPeriod & \' day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
 			DATE_PART(\'minute\', (startDate + INTERVAL bidPeriod & \' day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
 			DATE_PART(\'second\', (startDate + INTERVAL bidPeriod & \' day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
+=======
+<<<<<<< HEAD
+		$query = 'SELECT ((DATE_PART(\'day\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
+			DATE_PART(\'hour\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'minute\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'second\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
+=======
+		$query = 'SELECT ((DATE_PART(\'day\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
+			DATE_PART(\'hour\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'minute\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'second\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
+>>>>>>> origin/master
+>>>>>>> origin/master
 		FROM item_to_bid 
 		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -331,9 +345,15 @@ if(isset($_POST['admin_insert_user_submit']))
 		return $result;
 	}
 
-	function update_User($name, $email, $address){
-		$query = 'UPDATE users SET name=\''. $name . '\', address=\'' . $address . '\' 
-		WHERE email=\'' . $email . '\';';
+	function match_Password($email, $password) {
+		$query = 'SELECT * FROM users where email=\'' . $email . '\' AND password=\'' . $password . '\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
+	
+	function update_User($name, $email, $password, $address){
+		$query = 'UPDATE users SET name=\''. $name . '\', password=\'' . $password . '\', address=\'' . $address .  '\' WHERE email=\'' . $email . '\';';
 		
 		$result = pg_query($query);
 		return $result;

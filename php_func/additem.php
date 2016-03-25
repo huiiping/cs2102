@@ -52,6 +52,7 @@
 			$result = pg_query($query);
 
 			if (!$result) {
+				echo pg_last_error();
 				$_SESSION["addItemErrorMsg"] = "Failed to add item.";
 			} else {
 				$_SESSION["addItemErrorMsg"] = "Success!";
