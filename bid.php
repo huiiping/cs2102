@@ -77,7 +77,7 @@
 			extract($_POST); 
 			if($upd)
 			{
-				//update_Bid($_GET['itemID'], $_GET['startDate'], $currentBid);
+				insert_bid($_GET['itemID'], $_GET['startDate'], $currentBid);
 				header('location:index.php');
 			}
 		?>
@@ -112,11 +112,20 @@
 					?>
 				</td>
 				<td align="center">
-					<input type="text" name="currentBid" size="10" required placeholder="Enter Bid" width="60px" value="<?php list($currentBid) = pg_fetch_array($getCurrentBid); echo $currentBid;?>">
+				<?php 
+					$getItemDetail = select_A_Item($_GET['itemID']);
+					if(pg_num_rows($getItemDetail) > 0){
+						while ($row = pg_fetch_row($getItemDetail)){
+							$loanSetting = $row[4];
+							//echo $loanSetting;
+						}
+						
+					}
+				?>
+					<input <?php if($loanSetting == "BID") echo "type=\"text\""; else echo "type=\"hidden\"";?> name="currentBid" size="10" required placeholder="Enter Bid" width="60px" value="<?php list($currentBid) = pg_fetch_array($getCurrentBid); echo $currentBid;?>">
 				</td>
 
 				<td colspan="2" align="center" ><input type="submit" value="Bid" name="upd"/>
-				<input type="button" name="cancel" value="Cancel" onclick="window.location='admin_manage_items.php'" />
 				</td>
 			</tr>
 			</table>
