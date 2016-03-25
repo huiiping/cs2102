@@ -25,10 +25,10 @@
 		
 		if(pg_num_rows($result) > 0){
 				while ($row = pg_fetch_row($result)){
-					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[5] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[1] . nl2br("\n Description: ") . $row[2] . nl2br("\n Owner: ") . $row[3] . nl2br("\n Pickup Location: ") . $row[6] . nl2br("\n Return Location: ") . $row[7] .
+					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[5] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[1] . nl2br("\n Description: ") . $row[2] . nl2br("\n Owner: ") . $row[3] . nl2br("\n Pickup Location: ") . $row[6] . nl2br("\n Return Location: ") . $row[7] . nl2br("\n Start Date: ") . date('d/m/y', $row[8]) .
+					"<br><br>" .
+					"<td><a href='bid.php?itemID=$row[0]' class=\"submit_btn\">Bid</a></td>" .
 					'</a></div>' . '</div></div>' ;
-					
-					echo "<td><a href='bid.php?itemID=$row[0]' class=\"submit_btn\">Bid</a></td>";
 				}
 			}
 			else{
