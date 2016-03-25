@@ -298,15 +298,17 @@ or die('Could not connect: ' . pg_last_error());
 	
 	//select item to bid time left for an item
 	function select_Item_To_Bid_TimeLeft($itemId, $startDate){
-		$query = 'SELECT ((DATE_PART(\'day\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
-			DATE_PART(\'hour\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
-			DATE_PART(\'minute\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
-			DATE_PART(\'second\', (startDate + INTERVAL \'bidPeriod day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
+		$query = 'SELECT ((DATE_PART(\'day\', (startDate + INTERVAL bidPeriod & \' day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
+			DATE_PART(\'hour\', (startDate + INTERVAL bidPeriod & \' day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'minute\', (startDate + INTERVAL bidPeriod & \' day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'second\', (startDate + INTERVAL bidPeriod & \' day\')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
 		FROM item_to_bid 
 		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 		
-		return $result;
+		list($timeLeft)=pg_fetch_array($result);
+		echo $timeLeft;
+		//return $result;
 	}
 	
 if(isset($_POST['admin_insert_item_submit']))
