@@ -25,7 +25,7 @@ function
 function create_Item_Table(){
 	$query = 'CREATE TABLE item(
 			itemID SERIAL PRIMARY KEY,
-			item_name VARCHAR(256),
+			item_name VARCHAR(256) NOT NULL,
 			description VARCHAR(256),
 			availability BOOLEAN,
 			loanSetting VARCHAR(5) CHECK(loanSetting = \'SHARE\' OR loanSetting=\'BID\'),
