@@ -58,7 +58,7 @@
 			var fiveMinutes = 
 			<?php 
 				include 'php_func\functions.php';
-				$getTimeLeft = select_Item_To_Bid_TimeLeft('5', '2016-03-24 00:00:00');
+				$getTimeLeft = select_Item_To_Bid_TimeLeft($_GET['itemID'], $_GET['startDate']);
 				list($timeLeft)=pg_fetch_array($getTimeLeft);
 				echo $timeLeft;
 			?>,
@@ -92,7 +92,7 @@
 				</td>
 				<td align="center">
 					<?php
-						$getTotalBidders = select_Current_Total_Bidders('5', '2016-03-24');
+						$getTotalBidders = select_Current_Total_Bidders($_GET['itemID'], $_GET['startDate']);
 						list($totalBidders)=pg_fetch_array($getTotalBidders);
 						if($totalBidders > 0)
 							echo $totalBidders;
@@ -102,8 +102,8 @@
 				</td>
 				<td align="center">
 					<?php
-						$getCurrentBid = select_Current_Bid('5', '2016-03-24', $_SESSION["login_user"]);
-						$getHighestBidder = select_Current_Highest_Bidder('5', '2016-03-24');
+						$getCurrentBid = select_Current_Bid($_GET['itemID'], $_GET['startDate'], $_SESSION["login_user"]);
+						$getHighestBidder = select_Current_Highest_Bidder($_GET['itemID'], $_GET['startDate']);
 						list($highestBid) = pg_fetch_array($getHighestBidder);
 						if($highestBid > 0.0)
 							echo $highestBid;
