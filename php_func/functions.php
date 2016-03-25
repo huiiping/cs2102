@@ -274,6 +274,40 @@ or die('Could not connect: ' . pg_last_error());
 		return $result;
 	}
 	
+	//Insert item to bid details
+	function insert_item_to_bid($itemId, $startDate, $endDate, $loanBegin, $loanReturn){
+		$convert_startDate = date_create($startDate);
+		$convert_endDate = date_create($endDate);
+		$convert_loanBegin = date_create($loanBegin);
+		$convert_loanReturn = date_create($loanReturn);
+		$query = 'INSERT INTO item_to_bid (itemId, startDate, endDate, loanBegin, loanReturn) VALUES(
+			\'' . $itemId . '\', \'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', \'' . date_format($convert_endDate, "Y/m/d  H:i:s")
+			. '\', \'' . date_format($convert_loanBegin, "Y/m/d") . '\' , \'' . date_format($convert_loanReturn, "Y/m/d") . '\');';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		if(!$result){
+			//$_SESSION["admin_Insert_Item_Result"] = "Failed to add.";
+			
+		}
+		else{
+			//$_SESSION["admin_Insert_Item_Result"] = "Successfully added.";
+		}
+		header("Location: ../index.php");
+	}
+	
+	//select item to bid time left for an item
+	function select_Item_To_Bid_TimeLeft($itemId, $startDate){
+		$query = 'SELECT ((DATE_PART(\'day\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp) * 24 + 
+			DATE_PART(\'hour\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'minute\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
+			DATE_PART(\'second\', endDate::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
+		FROM item_to_bid 
+		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		return $result;
+	}
+	
 if(isset($_POST['admin_insert_item_submit']))
 {
 	admin_insert_New_Item();

@@ -18,12 +18,6 @@
 	
 ?>
     <div class="center_content">
-      <div class="oferta">
-        <div class="oferta_details">
-          <div class="oferta_title">Welcome to Carou-Share</div>
-          <div class="oferta_text"> We would like to share our items to our friends including around the neighbourhood. To do that, we designed this site to cater your needs to put your items in good use.  </div>
-          <a href="#" class="prod_buy">details</a> </div>
-      </div>
       <div class="center_title_bar">Place your Bid</div>
 	  
 		
@@ -35,13 +29,17 @@
 		function startTimer(duration, display) {
 			var timer = duration, minutes, seconds;
 			setInterval(function () {
-				minutes = parseInt(timer / 60, 10)
+				day = parseInt((((timer / 60) / 60) / 24) % 24, 10)
+				hr = parseInt(((timer / 60) / 60) % 24, 10);
+				minutes = parseInt((timer / 60) % 60, 10);
 				seconds = parseInt(timer % 60, 10);
 
+				day = day < 10 ? "0" + day : day;
+				hr = hr < 10 ? "0" + hr : hr;
 				minutes = minutes < 10 ? "0" + minutes : minutes;
 				seconds = seconds < 10 ? "0" + seconds : seconds;
 
-				display.textContent = minutes + ":" + seconds;
+				display.textContent = day + " Days " +  hr + ":" + minutes + ":" + seconds;
 
 				if (--timer < 0) {
 					timer = 0;
@@ -49,26 +47,31 @@
 			}, 1000);
 		}
 
+		// window.onload = function () {
+			// var fiveMinutes = 60 * 1,
+				// display = document.querySelector('#time');
+				// display.style.fontSize = "30px";
+			// startTimer(fiveMinutes, display);
+		// };
+
 		window.onload = function () {
-			var fiveMinutes = 60 * 1,
+			var fiveMinutes = 
+			<?php 
+				include 'php_func\functions.php';
+				$getTimeLeft = select_Item_To_Bid_TimeLeft('5', '2016-03-24 00:00:00');
+				list($timeLeft)=pg_fetch_array($getTimeLeft);
+				echo $timeLeft;
+			?>,
 				display = document.querySelector('#time');
 				display.style.fontSize = "30px";
 			startTimer(fiveMinutes, display);
 		};
-
-
 		</script>
 	  <?php
-			include 'php_func\functions.php';
+			
 			//$getTotalBidders = select_Current_Total_Bidders($_GET['itemID'], $_GET['startDate']);
 			//$getHighestBidder = select_Current_Highest_Bidder($_GET['itemID'], $_GET['startDate']);
 			//$getCurrentBid = select_Current_Bid($_GET['itemID'], $_GET['startDate'], $_SESSION["login_user"]);
-			
-			$getTotalBidders = select_Current_Total_Bidders('1', '2016-03-21 00:36:38');
-			$getHighestBidder = select_Current_Highest_Bidder('1', '2016-03-21 00:36:38');
-			$getCurrentBid = select_Current_Bid('1', '2016-03-21 00:36:38', $_SESSION["login_user"]);
-			
-			
 			
 			
 			extract($_POST); 
@@ -77,24 +80,6 @@
 				//update_Bid($_GET['itemID'], $_GET['startDate'], $currentBid);
 				header('location:index.php');
 			}
-			//echo "<table class=\"rwd-table\">";
-			//echo "<tr><th>Item</th><th>No. of bidders</th><th>Highest Bid</th><th>Your Bid</th><th></th></tr>"; 
-
-			
-
-			// echo "<tr>";    echo "<td>".$_GET['itemID']."</td>";
-
-			// echo "<td>".$totalBidders."</td>";
-
-			// echo "<td>".$highestBid."</td>";
-			
-			// echo "<td>".$currentBid."</td>";
-
-			// echo "<td><a href='update_bid.php?itemID=$id' class=\"submit_btn\">Edit</a>    <a href='admin_remove_item.php?itemID=$id' class=\"submit_btn\">Delete</a></td>";
-
-			// echo "</tr>";    
-
-			// echo "</table>";
 		?>
 		<form method="post" enctype="multipart/form-data">
 			<table class="rwd-table">
@@ -105,8 +90,9 @@
 						echo $_GET['itemID'];
 					?>
 				</td>
-				<td>
+				<td align="center">
 					<?php
+						$getTotalBidders = select_Current_Total_Bidders('5', '2016-03-24');
 						list($totalBidders)=pg_fetch_array($getTotalBidders);
 						if($totalBidders > 0)
 							echo $totalBidders;
@@ -114,8 +100,10 @@
 							echo "0";
 					?>
 				</td>
-				<td>
+				<td align="center">
 					<?php
+						$getCurrentBid = select_Current_Bid('5', '2016-03-24', $_SESSION["login_user"]);
+						$getHighestBidder = select_Current_Highest_Bidder('5', '2016-03-24');
 						list($highestBid) = pg_fetch_array($getHighestBidder);
 						if($highestBid > 0.0)
 							echo $highestBid;
@@ -123,7 +111,7 @@
 							echo "0.0";
 					?>
 				</td>
-				<td>
+				<td align="center">
 					<input type="text" name="currentBid" size="10" required placeholder="Enter Bid" width="60px" value="<?php list($currentBid) = pg_fetch_array($getCurrentBid); echo $currentBid;?>">
 				</td>
 
