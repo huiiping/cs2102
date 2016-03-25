@@ -109,9 +109,9 @@ function create_Item_To_Bid_Table(){
 	$query = 'CREATE TABLE item_to_bid(
 			itemID INT,
 			startDate Timestamp,
-			endDate Timestamp ,
+			bidPeriod INT,
 			loanBegin Date,
-			loanReturn Date,
+			loanPeriod INT,
 			PRIMARY KEY (itemID, startDate),
 			FOREIGN KEY (itemID) REFERENCES item(itemID) ON DELETE CASCADE);';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
