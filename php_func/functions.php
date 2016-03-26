@@ -317,10 +317,57 @@ or die('Could not connect: ' . pg_last_error());
 	}
 	
 	function insert_bid($itemId, $startDate, $bidder, $bidAmt){
-		$query = 'SELECT * FROM item_to_bid 
-		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+		$query = 'SELECT loanSetting FROM item 
+		WHERE itemID=\'' . $itemId . '\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
-		list($bidPeriod)=pg_fetch_array($result);
+		list($loanSetting)=pg_fetch_array($result);
+		
+		if($loanSetting == "BID"){
+			$query = 'SELECT * FROM bid 
+			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+			if(pg_num_rows($result) > 0){
+				$query = 'UPDATE bid SET bidAmt = \'' . $bidamt . '\' 
+				WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+				$result = pg_query($query) or die('Query failed: ' . pg_last_error());	
+				if(!$result){
+					$_SESSION["bid_Success"] = "Failed to bid.";
+				}
+				else{
+					$_SESSION["bid_Success"] = "Bid Successfully.";
+				}
+			}
+			else{
+				$query = 'INSERT INTO bid (bidAmt, itemID, bidder, startDate, dateLastBid) VALUES(\'' . $bidAmt . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\' , \'' . date("Y-m-d") . '\');';
+				$result = pg_query($query) or die('Query failed: ' . pg_last_error());	
+				if(!$result){
+					$_SESSION["bid_Success"] = "Failed to bid.";
+				}
+				else{
+					$_SESSION["bid_Success"] = "Bid Successfully.";
+				}
+			}
+		}
+		else{
+			$query = 'SELECT * FROM bid 
+			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+			if(pg_num_rows($result) > 0){
+				$_SESSION["bid_Success"] = "You have already placed a bid.";
+			}
+			else{
+				$query = 'INSERT INTO bid (dateLastBid, itemID, bidder, startDate, bidAmt) VALUES(\'' . date("Y-m-d") . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\', \'0\');';
+				$result = pg_query($query) or die('Query failed: ' . pg_last_error());	
+				if(!$result){
+					$_SESSION["bid_Success"] = "Failed to bid.";
+				}
+				else{
+					$_SESSION["bid_Success"] = "Bid Successfully.";
+				}
+			}
+		}
+		
+		//header("Location: ../bid.php");
 	}
 	
 if(isset($_POST['admin_insert_item_submit']))

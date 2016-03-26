@@ -1,6 +1,5 @@
 <?php
 
-	
 	$page_title = "Bid Item";
 	
 	include("includes/header.php");
@@ -12,16 +11,12 @@
 		header("location: loginpage.php");
 	}
 	
-	// if(!isset($_GET['itemID']) || !isset($_GET['startDate'])){
-		// header("location: index.php");
-	// }
-	
 ?>
     <div class="center_content">
       <div class="center_title_bar">Place your Bid</div>
 	  
 		
-		<div>Bidding will close in <span id="time"></span></div>
+		<div><span id="time"></span></div>
 	  
 		
 		<script>
@@ -39,7 +34,7 @@
 				minutes = minutes < 10 ? "0" + minutes : minutes;
 				seconds = seconds < 10 ? "0" + seconds : seconds;
 
-				display.textContent = day + " Days " +  hr + ":" + minutes + ":" + seconds;
+				display.textContent = "Bidding will close in: " + day + " Days " +  hr + ":" + minutes + ":" + seconds;
 
 				if (--timer < 0) {
 					timer = 0;
@@ -69,16 +64,15 @@
 		</script>
 	  <?php
 			
-			//$getTotalBidders = select_Current_Total_Bidders($_GET['itemID'], $_GET['startDate']);
-			//$getHighestBidder = select_Current_Highest_Bidder($_GET['itemID'], $_GET['startDate']);
-			//$getCurrentBid = select_Current_Bid($_GET['itemID'], $_GET['startDate'], $_SESSION["login_user"]);
-			
-			
 			extract($_POST); 
 			if($upd)
 			{
-				insert_bid($_GET['itemID'], $_GET['startDate'], $currentBid);
-				header('location:index.php');
+				insert_bid($_GET['itemID'], $_GET['startDate'], $_SESSION["login_user"], $currentBidAmt);
+			}
+			
+			if($_SESSION["bid_Success"] != ""){
+				echo $_SESSION["bid_Success"];
+				$_SESSION["bid_Success"] = "";
 			}
 		?>
 		<form method="post" enctype="multipart/form-data">
@@ -117,12 +111,10 @@
 					if(pg_num_rows($getItemDetail) > 0){
 						while ($row = pg_fetch_row($getItemDetail)){
 							$loanSetting = $row[4];
-							//echo $loanSetting;
 						}
-						
 					}
 				?>
-					<input <?php if($loanSetting == "BID") echo "type=\"text\""; else echo "type=\"hidden\"";?> name="currentBid" size="10" required placeholder="Enter Bid" width="60px" value="<?php list($currentBid) = pg_fetch_array($getCurrentBid); echo $currentBid;?>">
+					<input <?php if($loanSetting == "BID") echo "type=\"text\""; else echo "type=\"hidden\"";?> name="currentBidAmt" size="10" required placeholder="Enter Bid" width="60px" value="<?php list($currentBid) = pg_fetch_array($getCurrentBid); echo $currentBid;?>">
 				</td>
 
 				<td colspan="2" align="center" ><input type="submit" value="Bid" name="upd"/>
