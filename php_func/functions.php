@@ -334,6 +334,8 @@ or die('Could not connect: ' . pg_last_error());
 					$_SESSION["bid_Success"] = "Failed to bid.";
 				}
 				else{
+					$query = 'INSERT INTO bidHistory (bidAmt, itemID, bidder, startDate, dateLastBid, logDate) VALUES(\'' . $bidAmt . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\' , \'' . date("Y-m-d") . '\', NOW());';
+					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 					$_SESSION["bid_Success"] = "Bid Successfully.";
 				}
 			}
@@ -344,6 +346,8 @@ or die('Could not connect: ' . pg_last_error());
 					$_SESSION["bid_Success"] = "Failed to bid.";
 				}
 				else{
+					$query = 'INSERT INTO bidHistory (bidAmt, itemID, bidder, startDate, dateLastBid, logDate) VALUES(\'' . $bidAmt . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\' , \'' . date("Y-m-d") . '\', NOW());';
+					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 					$_SESSION["bid_Success"] = "Bid Successfully.";
 				}
 			}
@@ -362,6 +366,8 @@ or die('Could not connect: ' . pg_last_error());
 					$_SESSION["bid_Success"] = "Failed to bid.";
 				}
 				else{
+					$query = 'INSERT INTO bidHistory (dateLastBid, itemID, bidder, startDate, bidAmt, logDate) VALUES(\'' . date("Y-m-d") . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\', \'0\', NOW());';
+					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 					$_SESSION["bid_Success"] = "Bid Successfully.";
 				}
 			}

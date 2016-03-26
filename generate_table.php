@@ -53,6 +53,17 @@ function create_Bid_Table(){
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
 
+function create_Bid_History_Table(){
+	$query = 'CREATE TABLE bidHistory(
+			bidAmt float,
+			itemID INT,
+			bidder VARCHAR(256),
+			dateLastBid Timestamp,
+			startDate Timestamp,
+			logDate Timestamp);';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
 function create_Loan_Table(){
 	$query = 'CREATE TABLE loan(
 			itemID INT,
@@ -64,6 +75,17 @@ function create_Loan_Table(){
 			FOREIGN KEY (bidID) REFERENCES bid(bidID) ON DELETE CASCADE,
 			FOREIGN KEY (itemID) REFERENCES item(itemID) ON DELETE CASCADE,
 			FOREIGN KEY (borrower) REFERENCES users(email) ON DELETE CASCADE);';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
+function create_Loan_History_Table(){
+	$query = 'CREATE TABLE loanHistory(
+			itemID INT,
+			bidID INT,
+			borrower VARCHAR(256),
+			borrowedBegin DATE,
+			borrowedEnd DATE,
+			logDate Timestamp);';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
 
@@ -151,6 +173,13 @@ function insert_Loan(){
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
 
+function insert_Item_To_Bid(){
+	$convert_startDate = date_create("2016-03-25");
+	$convert_loanBegin = date_create($loanBegin);
+	$query = 'INSERT INTO item_to_bid (itemId, startDate, bidPeriod, loanBegin, loanPeriod) VALUES (\'1\', \'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', \'8\', \'' . date_format($convert_loanBegin, "Y/m/d") . '\', \'8\');';
+	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+}
+
 create_User_Table();
 create_Category_Table();
 create_Item_Table();
@@ -167,6 +196,10 @@ insert_Users();
 insert_Items();
 insert_Bid();
 insert_Loan();
+
+create_Bid_History_Table();
+create_Loan_History_Table();
+insert_Item_To_Bid();
 echo "Successful Generated all tables";
 pg_close($dbconn);
 ?>
