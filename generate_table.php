@@ -45,7 +45,7 @@ function create_Bid_Table(){
 			bidAmt float,
 			itemID INT,
 			bidder VARCHAR(256),
-			dateLastBid DATE,
+			dateLastBid Timestamp,
 			startDate Timestamp,
 			FOREIGN KEY (itemID) REFERENCES item(itemID) ON DELETE CASCADE,
 			FOREIGN KEY (itemID, startDate) REFERENCES item_to_bid(itemID, startDate) ON DELETE CASCADE,
