@@ -74,13 +74,11 @@
 	<div class="left_content">
       <div class="title_box">Categories</div>
       <ul class="left_menu">
-        <li class="odd"><a href="#">Books</a></li>
-        <li class="even"><a href="#">Tools</a></li>
-        <li class="odd"><a href="#">Furnitures</a></li>
-        <li class="even"><a href="#">Appliances</a></li>
-		<li class="odd"><a href="#">Home Maintenance</a></li>
-        <li class="even"><a href="#">Personal Care</a></li>
-		<li class="odd"><a href="#">Arts and Crafts</a></li>
+        <li class="odd"><a href="listbycategory.php/?category=Appliances">Appliances</a></li>
+        <li class="even"><a href="listbycategory.php/?category=Home Maintenance">Home Maintenance</a></li>
+        <li class="odd"><a href="listbycategory.php/?category=Personal Care">Personal Care</a></li>
+        <li class="even"><a href="listbycategory.php/?category=Books">Books</a></li>
+		<li class="odd"><a href="listbycategory.php/?category=Arts and Crafts">Arts and Crafts</a></li>
       </ul>
       <div class="title_box">Special Products</div>
       <div class="border_box">

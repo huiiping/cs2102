@@ -9,14 +9,21 @@ or die('Could not connect: ' . pg_last_error());
   }
     
   function select_Available_Items($email){
-		$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where availability = \'YES\' AND i.category = c.catid AND i.owner = u.email AND i.owner = \'' . $email . '\';';
+		$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic FROM item i, category c, users u where i.availability = \'YES\' AND i.category = c.catid AND i.owner = u.email AND i.owner = \'' . $email . '\';';
+		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
+		
+		return $result;
+	}
+	
+	function select_Items_By_Category($category){
+		$query = 'SELECT i.item_name, i.description, u.name, i.item_pic, i.itemID, i.pickuplocation, i.returnlocation, ib.startdate FROM item i, category c, users u, item_to_bid ib where i.availability = \'YES\' AND i.category = c.catid AND i.owner = u.email AND i.itemID=ib.itemID AND c.name = \'' . $category . '\';';
 		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 		
 		return $result;
 	}
 
 	function select_OnLoan_Items($email){
-		$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic, i.itemID FROM item i, category c, users u where availability = \'NO\' AND i.category = c.catid AND i.owner = u.email AND i.owner = \'' . $email . '\';';
+		$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic, i.itemID FROM item i, category c, users u where i.availability = \'NO\' AND i.category = c.catid AND i.owner = u.email AND i.owner = \'' . $email . '\';';
 		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 	
 		return $result;
