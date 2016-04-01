@@ -30,7 +30,7 @@ or die('Could not connect: ' . pg_last_error());
 	}
 	
 	function select_Borrowed_Items($email){
-		$query = 'SELECT i.item_name, b.bidid, u.name, i.item_pic, borrowedbegin, borrowedend, i.itemid, i.owner FROM loan l, item i, bid b, users u where l.itemid = i.itemid AND l.bidid = b.bidid AND l.borrower = u.email AND l.borrower = \'' . $email . '\';';
+		$query = 'SELECT i.item_name, b.bidid, u.name, i.item_pic, borrowedbegin, borrowedend, i.itemid, i.owner FROM loan l, item i, bid b, users u where i.availability = \'NO\' and l.itemid = i.itemid AND l.bidid = b.bidid AND l.borrower = u.email AND l.borrower = \'' . $email . '\';';
 		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 		
 		return $result;
