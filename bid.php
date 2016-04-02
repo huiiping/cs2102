@@ -55,7 +55,13 @@
 				include 'php_func\functions.php';
 				$getTimeLeft = select_Item_To_Bid_TimeLeft($_GET['itemID'], $_GET['startDate']);
 				list($timeLeft)=pg_fetch_array($getTimeLeft);
+				
+				if($timeLeft <= 0){
+					header("location: index.php");
+				}
+				
 				echo $timeLeft;
+				
 			?>,
 				display = document.querySelector('#time');
 				display.style.fontSize = "30px";

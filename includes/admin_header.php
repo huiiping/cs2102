@@ -58,7 +58,7 @@ if($_SESSION["login_user"] && $_SESSION["logon_type"] == "ADMIN") {
         <li class="odd"><a href="admin_manage_users.php">Manage Users</a></li>
         <li class="even"><a href="admin_manage_items.php">Manage Items</a></li>
         <li class="odd"><a href="admin_search_info.php">Search Information</a></li>
-		<li class="even"><a href="admin_manual_run_biddin_check.php">Auto Update Bidding Result</a></li>
+		<li class="even"><a href="admin_manual_run_bidding_check.php">Auto Update Bidding Result</a></li>
       </ul>
       
 
