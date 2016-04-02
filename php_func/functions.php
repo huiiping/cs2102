@@ -383,6 +383,77 @@ or die('Could not connect: ' . pg_last_error());
 		//header("Location: ../bid.php");
 	}
 	
+	//get the bidding status
+	function select_bid_round_status(){
+	
+		$query = 'SELECT itemID, startDate 
+		FROM item_to_bid 
+		WHERE (startDate::date + bidPeriod) >= \'' . date("Y-m-d H:i:s") . '\' AND loanBegin > \'' . date("Y-m-d") . '\';';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		return $result;
+	}
+	
+	function check_Winner($itemId, $startDate){
+		$query = 'SELECT loanBegin, (loanBegin::date + loanPeriod) AS loanEnd
+		FROM item_to_bid 
+		WHERE startDate=\'' . $startDate . '\' AND itemID=\'' . $itemId . '\';';
+		$getItem_To_Bid_Details = pg_query($query) or die('Query failed: ' . pg_last_error());
+		list($loanBegin, $loanEnd)=pg_fetch_array($getItem_To_Bid_Details);
+		
+		$query = 'SELECT loanSetting 
+		FROM item   
+		WHERE itemID=\'' . $itemId . '\';';
+		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		
+		list($loanSetting)=pg_fetch_array($result);
+		
+		if($loanSetting == "BID"){
+			$query = 'SELECT bidID, bidder 
+			FROM bid 
+			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\' 
+			GROUP BY bidID, bidder 
+			HAVING bidAmt >=ALL (SELECT MAX(bidAmt) FROM bid WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\');';
+			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		}
+		else{
+			$query = 'SELECT bidID, bidder 
+			FROM bid 
+			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\' 
+			GROUP BY bidID, bidder 	
+			HAVING dateLastBid <=ALL (SELECT dateLastBid FROM bid WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\');';
+			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+		}
+
+		$total_rows = pg_num_rows($result);
+		$currentIndex = 0;
+		//check if there exists a winner
+		while(list($bidID, $bidder)=pg_fetch_array($result)){
+			if($currentIndex == $total_rows){
+				break;
+			}
+			$currentIndex++;
+			$query = 'SELECT * FROM loan WHERE itemID=\'' . $itemId . '\' AND bidID=\'' . $bidID . '\' AND borrower=\'' . $bidder . '\';';
+			$result = pg_query($query) or die('Query failed: ' . pg_last_error());	
+			
+			if(pg_num_rows($result) <= 0){
+				$query = 'INSERT INTO loan (itemID, bidID, borrower, borrowedBegin, borrowedEnd) VALUES(\'' . $itemId . '\', \'' . $bidID . '\', \'' . $bidder . '\', \'' . $loanBegin . '\' , \'' . $loanEnd . '\');';
+				$result = pg_query($query) or die('Query failed: ' . pg_last_error());	
+				if(!$result){
+					$_SESSION["bid_Winner"] = "Error";
+				}
+				else{
+					$query = 'INSERT INTO loanHistory (itemID, bidID, borrower, borrowedBegin, borrowedEnd, logDate) VALUES(\'' . $itemId . '\', \'' . $bidID . '\', \'' . $bidder . '\', \'' . $loanBegin . '\' , \'' . $loanEnd . '\', NOW());';
+					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+					
+				}
+			}else{
+				$_SESSION["bid_Winner"] = "No record to update";
+			}
+			
+		}
+	}
+	
 if(isset($_POST['admin_insert_item_submit']))
 {
 	admin_insert_New_Item();
