@@ -23,7 +23,10 @@ $oldLoanPeriod = pg_query("SELECT loanPeriod
 							WHERE itemID = '".$itemID."';");
 list($getOldLoanPeriod)=pg_fetch_array($oldLoanPeriod);					
 
-$convert_startDate = date("Y/m/d  H:i:s");
+$startDate = date_create(date("Y/m/d"));
+
+//$convert_startDate = date("Y/m/d  H:i:s");
+$convert_startDate = date_format($startDate, "Y/m/d  H:i:s");
 $loadBeginDate = date("Y/m/d  H:i:s", strtotime("+" . $getOldBidPeriod + 5 . " days"));//hard code 5 days after the bidding round is over
 
 $query = "UPDATE item SET availability='TRUE'

@@ -32,6 +32,10 @@
 						continue;
 					}
 					
+					if($owner == ""){
+						continue;
+					}
+					
 					$getTimeLeft = select_Item_To_Bid_TimeLeft($row[0], $row[8]);
 					list($timeLeft)=pg_fetch_array($getTimeLeft);
 					if($timeLeft > 0){
