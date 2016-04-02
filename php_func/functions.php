@@ -306,7 +306,7 @@ or die('Could not connect: ' . pg_last_error());
 	//select item to bid time left for an item
 	function select_Item_To_Bid_TimeLeft($itemId, $startDate){
 		$query = 'SELECT bidPeriod FROM item_to_bid 
-		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\' AND transactionDone=\'FALSE\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 		list($bidPeriod)=pg_fetch_array($result);
 		
@@ -317,7 +317,7 @@ or die('Could not connect: ' . pg_last_error());
 			DATE_PART(\'minute\', (startDate + INTERVAL ' . $bidPeriod . ')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)) * 60 + 
 			DATE_PART(\'second\', (startDate + INTERVAL ' . $bidPeriod . ')::timestamp - \'' . date("Y-m-d H:i:s") . '\'::timestamp)
 		FROM item_to_bid 
-		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+		WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\' AND transactionDone=\'FALSE\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 		
 		return $result;
@@ -388,7 +388,7 @@ or die('Could not connect: ' . pg_last_error());
 	
 		$query = 'SELECT itemID, startDate 
 		FROM item_to_bid 
-		WHERE (startDate::date + bidPeriod) >= \'' . date("Y-m-d H:i:s") . '\' AND loanBegin > \'' . date("Y-m-d") . '\';';
+		WHERE (startDate::date + bidPeriod) <= \'' . date("Y-m-d H:i:s") . '\' AND loanBegin >= \'' . date("Y-m-d") . '\' AND transactionDone=\'FALSE\';';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 		
 		return $result;
@@ -397,7 +397,7 @@ or die('Could not connect: ' . pg_last_error());
 	function check_Winner($itemId, $startDate){
 		$query = 'SELECT loanBegin, (loanBegin::date + loanPeriod) AS loanEnd
 		FROM item_to_bid 
-		WHERE startDate=\'' . $startDate . '\' AND itemID=\'' . $itemId . '\';';
+		WHERE startDate=\'' . $startDate . '\' AND itemID=\'' . $itemId . '\' AND transactionDone=\'FALSE\';';
 		$getItem_To_Bid_Details = pg_query($query) or die('Query failed: ' . pg_last_error());
 		list($loanBegin, $loanEnd)=pg_fetch_array($getItem_To_Bid_Details);
 		
