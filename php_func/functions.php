@@ -446,6 +446,10 @@ or die('Could not connect: ' . pg_last_error());
 					$query = 'INSERT INTO loanHistory (itemID, bidID, borrower, borrowedBegin, borrowedEnd, logDate) VALUES(\'' . $itemId . '\', \'' . $bidID . '\', \'' . $bidder . '\', \'' . $loanBegin . '\' , \'' . $loanEnd . '\', NOW());';
 					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 					
+					$query = 'UPDATE item set availability=\'FALSE\' WHERE itemID=\'' . $itemId . '\';';
+					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+					
+					$_SESSION["bid_Winner"] = "Success";
 				}
 			}else{
 				$_SESSION["bid_Winner"] = "No record to update";

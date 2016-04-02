@@ -30,7 +30,6 @@
 				echo $_SESSION["bid_Winner"];
 				$_SESSION["bid_Winner"] = "";
 			}
-			clearstatcache();
 		?>
 		
     </div>
