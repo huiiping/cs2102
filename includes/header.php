@@ -36,8 +36,6 @@
 				echo '<li class="divider"></li>';
 			}
 		?>
-        <li><a href="mybiditems.php" class="nav">Bidding</a></li>
-        <li class="divider"></li>
 		<?php
 			if($_SESSION["login_user"]) {
 				echo '<li><a href="additem.php" class="nav">Add Item</a></li>';
