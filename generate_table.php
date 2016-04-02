@@ -134,6 +134,7 @@ function create_Item_To_Bid_Table(){
 			bidPeriod INT,
 			loanBegin Date,
 			loanPeriod INT,
+			transactionDone BOOLEAN NOT NULL DEFAULT \'FALSE\',
 			PRIMARY KEY (itemID, startDate),
 			FOREIGN KEY (itemID) REFERENCES item(itemID) ON DELETE CASCADE);';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -176,7 +177,7 @@ function insert_Loan(){
 function insert_Item_To_Bid(){
 	$convert_startDate = date_create("2016-03-25");
 	$convert_loanBegin = date_create($loanBegin);
-	$query = 'INSERT INTO item_to_bid (itemId, startDate, bidPeriod, loanBegin, loanPeriod) VALUES (\'1\', \'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', \'8\', \'' . date_format($convert_loanBegin, "Y/m/d") . '\', \'8\');';
+	$query = 'INSERT INTO item_to_bid (itemId, startDate, bidPeriod, loanBegin, loanPeriod, transactionDone) VALUES (\'1\', \'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', \'8\', \'' . date_format($convert_loanBegin, "Y/m/d") . '\', \'8\', \'FALSE\');';
 	$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 }
 
