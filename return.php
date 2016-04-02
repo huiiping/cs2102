@@ -32,7 +32,7 @@ $query2 = "UPDATE item_to_bid
 			WHERE itemID = '".$itemID."';";
 			
 $query3 = "INSERT INTO item_to_bid (itemId, startDate, bidPeriod, loanBegin, loanPeriod, transactionDone) 
-			VALUES(".$itemID."', '".$convert_startDate."', '".$oldBidPeriod."', '".$oldLoanBegin."', '".$oldLoanPeriod."', \'FALSE\');"
+			VALUES(".$itemID."', '".$convert_startDate."', '".$oldBidPeriod."', '".$oldLoanBegin."', '".$oldLoanPeriod."', \'FALSE\');";
 
 		$result = pg_query($query);
 		$result2 = pg_query($query2);
