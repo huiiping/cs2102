@@ -1,7 +1,7 @@
     <div class="right_content">
       <div class="title_box">Search</div>
       <div class="border_box">
-        <input type="text" name="newsletter" id="newsletter" class="newsletter_input" value="keyword"/>
+        <input type="text" name="newsletter" id="newsletter" class="newsletter_input" placeholder="keyword"/>
         <a href="searchresult.php?" 
 			onclick="window.location=this.href+'newsletter='+document.getElementById('newsletter').value;return false;" 
 			class="join">search</a> </div>
