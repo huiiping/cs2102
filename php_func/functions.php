@@ -366,19 +366,19 @@ or die('Could not connect: ' . pg_last_error());
 		}
 		else{
 			$query = 'SELECT * FROM bid 
-			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\' AND bidder=\'' . $bidder . '\';';
 			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 			if(pg_num_rows($result) > 0){
 				$_SESSION["bid_Success"] = "You have already placed a bid.";
 			}
 			else{
-				$query = 'INSERT INTO bid (dateLastBid, itemID, bidder, startDate, bidAmt) VALUES(\'' . date("Y-m-d") . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\', \'0\');';
+				$query = 'INSERT INTO bid (dateLastBid, itemID, bidder, startDate, bidAmt) VALUES(\'' . date("Y-m-d H:i:s") . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\', \'0\');';
 				$result = pg_query($query) or die('Query failed: ' . pg_last_error());	
 				if(!$result){
 					$_SESSION["bid_Success"] = "Failed to bid.";
 				}
 				else{
-					$query = 'INSERT INTO bidHistory (dateLastBid, itemID, bidder, startDate, bidAmt, logDate) VALUES(\'' . date("Y-m-d") . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\', \'0\', NOW());';
+					$query = 'INSERT INTO bidHistory (dateLastBid, itemID, bidder, startDate, bidAmt, logDate) VALUES(\'' . date("Y-m-d H:i:s") . '\', \'' . $itemId . '\', \'' . $bidder . '\', \'' . $startDate . '\', \'0\', NOW());';
 					$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 					$_SESSION["bid_Success"] = "Bid Successfully.";
 				}
