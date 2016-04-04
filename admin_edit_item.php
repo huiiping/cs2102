@@ -17,12 +17,13 @@
       <div class="center_title_bar">Update User Details</div>
 		<?php 
 			$result = select_A_Item($_GET['itemID']);
-			
+			$getPickUp_Return_Loc = get_pickup_returnLoc($_GET['itemID']);
+			$rowPicUp_Return_Loc = pg_fetch_array($getPickUp_Return_Loc);
 			$rowReceived=pg_fetch_array($result);
 			extract($_POST); 
 			if($upd)
 			{
-				admin_update_Item_Details($_GET['itemID'], $itemname, $itemDesc, $formItemCategory, $shareType, $formOwners);
+				admin_update_Item_Details($_GET['itemID'], $itemname, $itemDesc, $formItemCategory, $shareType, $formOwners, $itemPickUp, $itemReturnLoc);
 				header('location:admin_manage_items.php');
 			}
 		?>
@@ -61,6 +62,18 @@
 				<td><label for="lblDescription" class="register_label">Description:</label></td>
 				<td>
 					<textarea name="itemDesc" required placeholder="Type the description here" class="register_input2"><?php echo $rowReceived['description'];?></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="lblPickUpLoc" class="register_label">Pick Up Location:</label></td>
+				<td>
+					<textarea name="itemPickUp" required placeholder="Type the pick up location  here" class="register_input2"><?php echo $rowPicUp_Return_Loc[0];?></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="lblReturnLoc" class="register_label">Return Location:</label></td>
+				<td>
+					<textarea name="itemReturnLoc" required placeholder="Type the return location here" class="register_input2"><?php echo $rowPicUp_Return_Loc[1];?></textarea>
 				</td>
 			</tr>
 			<tr>

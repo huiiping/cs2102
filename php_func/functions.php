@@ -211,9 +211,9 @@ or die('Could not connect: ' . pg_last_error());
 		header("Location: ../admin_manage_users.php");
 	}
 	
-	function admin_update_Item_Details($itemId, $itemname, $description, $itemCat, $itemShareType, $itemOwner){
+	function admin_update_Item_Details($itemId, $itemname, $description, $itemCat, $itemShareType, $itemOwner, $pickUp, $returnLoc){
 		$query = 'UPDATE item SET item_name=\''. $itemname . '\',
-		description=\'' . $description . '\', category=\'' . $itemCat . '\', loanSetting=\'' . $itemShareType . '\', owner=\'' . $itemOwner . '\' WHERE itemID=\'' . $itemId . '\';';
+		description=\'' . $description . '\', category=\'' . $itemCat . '\', loanSetting=\'' . $itemShareType . '\', owner=\'' . $itemOwner . '\', pickupLocation=\'' . $pickUp . '\', returnLocation=\'' . $returnLoc . '\' WHERE itemID=\'' . $itemId . '\';';
 		$result = pg_query($query);
 		
 		if(!$result){
@@ -512,6 +512,13 @@ if(isset($_POST['admin_insert_user_submit']))
 	
 	function get_Item_name($itemID){
 		$query = 'SELECT item_name FROM item where itemID=\'' . $itemID . '\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
+	
+	function get_pickup_returnLoc($itemID){
+		$query = 'SELECT pickupLocation, returnLocation FROM item where itemID=\'' . $itemID . '\';';
 		
 		$result = pg_query($query);
 		return $result;
