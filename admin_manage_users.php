@@ -71,7 +71,7 @@
 			include_once 'php_func\functions.php';
 			$result = select_All_Public_Users();
 				echo "<table class=\"rwd-table\">";
-				echo "<tr><th>Name</th><th>Email</th><th>Address</th><th>Display Picture</th>   </tr>"; 
+				echo "<tr><th>Name</th><th>Email</th><th>Address</th>   </tr>"; 
 
 				while(list($a,$b,$c,$d,$e)=pg_fetch_array($result))
 				{
@@ -82,7 +82,7 @@
 
 				echo "<td>".$d."</td>";
 
-				echo "<td>".$e."</td>";
+				//echo "<td>".$e."</td>";
 
 				echo "<td><a href='admin_edit_user.php?email=$b' class=\"submit_btn\">Edit</a>    <a href='admin_remove_user.php?email=$b' class=\"submit_btn\">Delete</a></td>";
 

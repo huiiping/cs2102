@@ -140,9 +140,11 @@ or die('Could not connect: ' . pg_last_error());
 			$desc = $_POST["itemDesc"];
 			$shareType = $_POST["shareType"];
 			$owner = $_POST["formOwners"];
-			$query = 'INSERT INTO item (item_name, description, availability, loanSetting, owner, category, item_pic) VALUES(
+			$pickUp = $_POST["itemPickUp"];
+			$returnLoc = $_POST["itemReturnLoc"];
+			$query = 'INSERT INTO item (item_name, description, availability, loanSetting, owner, category, item_pic, pickupLocation, returnLocation) VALUES(
 			\'' . $name . '\', \'' . $desc . '\', \'TRUE\', \'' . strtoupper($shareType)
-			. '\', \'' . $owner . '\' , \'' . $cat . '\' , \'' . $owner . "_" . basename($_FILES["imageToUpload"]["name"]) . '\');';
+			. '\', \'' . $owner . '\' , \'' . $cat . '\' , \'' . $owner . "_" . basename($_FILES["imageToUpload"]["name"]) . '\', \'' . $pickUp . '\', \'' . $returnLoc . '\');';
 			$result = pg_query($query);
 		
 			if(!$result){
@@ -241,6 +243,8 @@ or die('Could not connect: ' . pg_last_error());
 	}
 	
 	function admin_Delete_Item($itemId){
+		$getImagePath = pg_query("SELECT item_pic FROM item WHERE itemID='" . $itemId . "';");
+		list($imagePath)=pg_fetch_array($getImagePath);
 		$query = 'DELETE FROM item WHERE itemID=\'' . $itemId . '\';';
 		$result = pg_query($query);
 		
@@ -249,7 +253,8 @@ or die('Could not connect: ' . pg_last_error());
 			
 		}
 		else{
-			$_SESSION["admin_Delete_Item_Result"] = "Successfully Deleted.";
+			unlink("images/" . $imagePath);//delete the image file
+			$_SESSION["admin_Delete_Item_Result"] = "Successfully Deleted." ;
 		}
 	
 		header("Location: ../admin_manage_items.php");
@@ -456,6 +461,10 @@ or die('Could not connect: ' . pg_last_error());
 			}
 			
 		}
+		
+		if($total_rows != 0){
+			$_SESSION["bid_Winner"] = "No record to update";
+		}
 	}
 	
 	function select_Owner_BasedOn_Item($itemId){
@@ -501,5 +510,11 @@ if(isset($_POST['admin_insert_user_submit']))
 		return $result;
 	}
 	
+	function get_Item_name($itemID){
+		$query = 'SELECT item_name FROM item where itemID=\'' . $itemID . '\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
 //pg_close($dbconn);
 ?>

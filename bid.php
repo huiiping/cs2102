@@ -87,7 +87,9 @@
 			<tr>
 				<td>
 					<?php
-						echo $_GET['itemID'];
+						$getItemName = get_Item_name($_GET['itemID']);
+						list($getName)=pg_fetch_array($getItemName);
+						echo "Item code: " . $_GET['itemID'] . ", Name: " . $getName;
 					?>
 				</td>
 				<td align="center">

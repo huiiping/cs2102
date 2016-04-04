@@ -25,6 +25,10 @@
 				}
 				
 			}
+			
+			if(pg_num_rows($result) == 0){
+				echo "No updates are needed.";
+			}
 
 			if($_SESSION["bid_Winner"] != ""){
 				echo $_SESSION["bid_Winner"];

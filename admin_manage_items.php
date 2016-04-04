@@ -49,6 +49,18 @@
 				</td>
 			</tr>
 			<tr>
+				<td><label for="lblPickUpLoc" class="register_label">Pick Up Location:</label></td>
+				<td>
+					<textarea name="itemPickUp" required placeholder="Type the pick up location here" class="register_input2"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="lblReturnLoc" class="register_label">Return Location:</label></td>
+				<td>
+					<textarea name="itemReturnLoc" required placeholder="Type the return location here" class="register_input2"></textarea>
+				</td>
+			</tr>
+			<tr>
 				<td><label for="lblLoanType" class="register_label">Share it for free or for an amount:</label></td>
 				<td>
 					<input type="radio" name="shareType"
