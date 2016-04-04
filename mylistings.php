@@ -48,7 +48,8 @@
 				}
 			}
 			else{
-				echo 'Sorry, no item found.';
+				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
+				'</a></div>' . '</div></div>' ;
 			}
 		  ?>
 		  
@@ -63,7 +64,8 @@
 				}
 			}
 			else{
-				echo 'Sorry, no item found.';
+				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
+				'</a></div>' . '</div></div>' ;
 			}
 		  ?>
 		  
@@ -91,7 +93,8 @@
 				}
 			}
 			else{
-				echo 'Sorry, no item found.';
+				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
+				'</a></div>' . '</div></div>' ;
 			}
 			?>
 		  
@@ -110,12 +113,29 @@
 				}
 			}
 			else{
-				echo 'Sorry, no item found.';
+				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
+				'</a></div>' . '</div></div>' ;
 			}
 			?>
 		  
 		  <div class="center_title_bar">History of Loans</div>
-		  
+		  <?php
+			$result = select_Loan_History($_SESSION["login_user"]);
+			
+			if(pg_num_rows($result) > 0){
+				while ($row = pg_fetch_row($result)){
+					echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[4] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[0] . nl2br("\n Description: ") . $row[1] . nl2br("\n Category: ") . $row[2] . nl2br("\n Borrower: ") . $row[3] .
+					
+					'</a></div>' . '</div></div>' ;
+					
+					
+				}
+			}
+			else{
+				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
+				'</a></div>' . '</div></div>' ;
+			}
+			?>
 		</div>
 		
 		
@@ -129,7 +149,7 @@
 
 		 <div class="center_title_bar">Still Borrowing</div>
 			<?php
-			$result = select_Borrowed_Items($_SESSION["login_user"]);
+			$result = select_Borrowing_Items($_SESSION["login_user"]);
 			
 			if(pg_num_rows($result) > 0){
 				while ($row = pg_fetch_row($result)){
@@ -138,7 +158,8 @@
 				}
 			}
 			else{
-				echo 'Sorry, no item found.';
+				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
+				'</a></div>' . '</div></div>' ;
 			}
 		  ?>
 		
@@ -161,7 +182,8 @@
 				}
 			}
 			else{
-				echo 'Sorry, no item found.';
+				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
+				'</a></div>' . '</div></div>' ;
 			}
 		  ?> 
 		</div>

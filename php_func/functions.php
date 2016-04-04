@@ -29,15 +29,29 @@ or die('Could not connect: ' . pg_last_error());
 		return $result;
 	}
 	
+	function select_Loan_History($email){
+		$query = 'SELECT i.item_name, i.description, c.name, u.name, i.item_pic, i.itemID FROM item i, category c, loan l, users u where i.itemID = l.itemID AND i.category = c.catid AND l.borrowedEnd < CURRENT_DATE AND l.borrower = u.email AND i.owner = \'' . $email . '\';';
+		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
+	
+		return $result;
+	}
+	
+	function select_Borrowing_Items($email){
+		$query = 'SELECT i.item_name, b.bidid, u.name, i.item_pic, borrowedbegin, borrowedend, i.itemid, i.owner FROM loan l, item i, bid b, users u where i.availability = \'NO\' and l.itemid = i.itemid AND l.bidid = b.bidid AND l.borrowedEnd >= CURRENT_DATE AND l.borrower = u.email AND l.borrower = \'' . $email . '\';';
+		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
+		
+		return $result;
+	}
+	
 	function select_Borrowed_Items($email){
-		$query = 'SELECT i.item_name, b.bidid, u.name, i.item_pic, borrowedbegin, borrowedend, i.itemid, i.owner FROM loan l, item i, bid b, users u where i.availability = \'NO\' and l.itemid = i.itemid AND l.bidid = b.bidid AND l.borrower = u.email AND l.borrower = \'' . $email . '\';';
+		$query = 'SELECT i.item_name, b.bidid, u.name, i.item_pic, borrowedbegin, borrowedend, i.itemid, i.owner FROM loan l, item i, bid b, users u where i.availability = \'NO\' and l.itemid = i.itemid AND l.bidid = b.bidid AND l.borrowedEnd < CURRENT_DATE AND l.borrower = u.email AND l.borrower = \'' . $email . '\';';
 		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 		
 		return $result;
 	}
 	
 	function select_Current_Bidding_Items($email){
-		$query = 'SELECT i.item_name, b.bidid, b.bidamt, u.name, i.item_pic, b.datelastbid FROM bid b, item i, users u where b.itemid = i.itemid AND b.bidder = u.email AND b.bidder = \'' . $email . '\';';
+		$query = 'SELECT i.item_name, b.bidid, b.bidamt, u.name, i.item_pic, b.datelastbid FROM bid b, item i, users u, item_to_bid itb where itb.itemid = i.itemid AND itb.itemid = b.itemid AND b.bidder = u.email AND b.bidder = \'' . $email . '\';';
 		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 		
 		return $result;
