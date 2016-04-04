@@ -418,7 +418,7 @@ or die('Could not connect: ' . pg_last_error());
 			FROM bid 
 			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\' 
 			GROUP BY bidID, bidder 
-			HAVING bidAmt >=ALL (SELECT MAX(bidAmt) FROM bid WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\');';
+			HAVING bidAmt = (SELECT MAX(bidAmt) FROM bid WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\');';
 			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 		}
 		else{
@@ -432,6 +432,7 @@ or die('Could not connect: ' . pg_last_error());
 
 		$total_rows = pg_num_rows($result);
 		$currentIndex = 0;
+		$gotRecord_To_Update_bool = true;
 		//check if there exists a winner
 		while(list($bidID, $bidder)=pg_fetch_array($result)){
 			if($currentIndex == $total_rows){
@@ -457,12 +458,12 @@ or die('Could not connect: ' . pg_last_error());
 					$_SESSION["bid_Winner"] = "Success";
 				}
 			}else{
-				$_SESSION["bid_Winner"] = "No record to update";
+				$gotRecord_To_Update_bool = false;
+				
 			}
 			
 		}
-		
-		if($total_rows != 0){
+		if($total_rows == 0 || !$gotRecord_To_Update_bool){
 			$_SESSION["bid_Winner"] = "No record to update";
 		}
 	}

@@ -26,7 +26,7 @@
 				
 			}
 			
-			if(pg_num_rows($result) == 0){
+			if(pg_num_rows($getListOfPendingBidRound) == 0){
 				echo "No updates are needed.";
 			}
 
