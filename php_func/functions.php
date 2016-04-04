@@ -336,11 +336,11 @@ or die('Could not connect: ' . pg_last_error());
 		
 		if($loanSetting == "BID"){
 			$query = 'SELECT * FROM bid 
-			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+			WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\' AND bidder=\'' . $bidder . '\';';
 			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
 			if(pg_num_rows($result) > 0){
-				$query = 'UPDATE bid SET bidAmt = \'' . $bidamt . '\' 
-				WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\';';
+				$query = 'UPDATE bid SET bidAmt = \'' . $bidAmt . '\' 
+				WHERE itemID=\'' . $itemId . '\' AND startDate=\'' . $startDate . '\' AND bidder=\'' . $bidder . '\';';
 				$result = pg_query($query) or die('Query failed: ' . pg_last_error());	
 				if(!$result){
 					$_SESSION["bid_Success"] = "Failed to bid.";
