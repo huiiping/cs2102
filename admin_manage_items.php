@@ -1,6 +1,6 @@
 <?php
 
-	$page_title = "Manual update Winners";
+	$page_title = "Manage items";
 	
 	include("includes/admin_header.php");
 	
