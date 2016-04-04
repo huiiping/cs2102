@@ -13,8 +13,9 @@
           <a href="#" class="prod_buy">details</a> </div>
       </div>
 	  
-	  <?php $cat = htmlspecialchars($_GET['category']); ?>
-      <div class="center_title_bar">Showing items in <?php echo $cat ?> Category</div>
+	  <!-- <?php $cat = htmlspecialchars($_GET['category'], ENT_COMPAT | ENT_XHTML, 'ISO-8859-1'); ?> -->
+	  <?php $cat = $_GET['category']; ?>
+      <div class="center_title_bar">Showing items in <?php echo $cat; ?> Category</div>
 	  
 		<?php
 		
