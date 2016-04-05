@@ -55,7 +55,7 @@
 		  
 		  <div class="center_title_bar">History of Bidding</div>
 		  <?php
-			$result = select_Current_Bidding_Items($_SESSION["login_user"]);
+			$result = select_Expired_Bidding_Items($_SESSION["login_user"]);
 			
 			if(pg_num_rows($result) > 0){
 				while ($row = pg_fetch_row($result)){
@@ -78,7 +78,7 @@
 			<p>Showing a list of Personal Items:</p>
 			<p>- Available</p>
 			<p>- On Loan</p>
-			<p>- History of Loans</p>
+			<p>- History of Loans to Other Users</p>
 		  </div>
 		  
 		  <div class="center_title_bar">Personal Items - AVAILABLE</div>
@@ -118,7 +118,7 @@
 			}
 			?>
 		  
-		  <div class="center_title_bar">History of Loans</div>
+		  <div class="center_title_bar">History of Loans to Other Users</div>
 		  <?php
 			$result = select_Loan_History($_SESSION["login_user"]);
 			
@@ -143,7 +143,7 @@
 		  <div>
 			<p>Showing a list of Borrowed Items:</p>
 			<p>- Still Borrowing</p>
-			<p>- History of Borrowed Items</p>
+			<p>- History of Borrowed Items from Other Users</p>
 		  </div>
 		  
 
@@ -163,7 +163,7 @@
 			}
 		  ?>
 		
-		<div class="center_title_bar">History of Borrowed Items</div>
+		<div class="center_title_bar">History of Borrowed Items from Other Users</div>
 			<?php
 			$result = select_Borrowed_Items($_SESSION["login_user"]);
 			
