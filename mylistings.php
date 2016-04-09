@@ -24,6 +24,56 @@
  <body onload="init()">
 	<div class="center_content">
 
+		<?php 
+		
+		extract($_POST); 
+			if($upd)
+			{
+				$itemID=$_POST['itemID'];
+				$owner=$_POST['owner'];
+				$borrower=$_SESSION['login_user'];
+				$rating=$_POST['ratings'];
+
+				
+				$query = "SELECT * FROM rating WHERE itemID='" . $itemID . "' AND owner='" . $owner . "' AND borrower='" . $borrower . "';";
+				 
+				$res = pg_query($query);
+				
+				if (!$res) {
+						echo "Error. Connection problem.";
+				} else {
+					
+					if(pg_num_rows($res) <= 0){
+						$query = "INSERT INTO rating (itemid, owner, borrower, score) 
+							VALUES (
+						'".$itemID."',
+						'".$owner."',
+						'".$borrower."', 
+						'".$rating."'
+						);";
+
+						$res = pg_query($query);
+						
+						if (!$res) {
+								echo "Rating not added.";
+						} else {
+							echo "Rating added.";
+						}
+					}
+					else{
+						$query = "UPDATE rating SET score='" . $rating . "' WHERE itemID='" . $itemID . "' AND owner='" . $owner . "' AND borrower='" . $borrower . "';";
+						$res = pg_query($query);
+						
+						if (!$res) {
+								echo "Rating not updated.";
+						} else {
+							echo "Rating updated.";
+						}
+					}
+				}
+			}
+		?>
+		
 		<ul id="tabs">
 		  <li><a href="#personalitems">Personal Items</a></li>
 		  <li><a href="#borroweditems">Borrowed Items</a></li>
@@ -48,8 +98,7 @@
 				}
 			}
 			else{
-				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
-				'</a></div>' . '</div></div>' ;
+				echo '<div class="prod_box">' . '<div class="product_title">' . 'Sorry, no item found.' . '</div></div>' ;
 			}
 		  ?>
 		  
@@ -64,8 +113,7 @@
 				}
 			}
 			else{
-				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
-				'</a></div>' . '</div></div>' ;
+				echo '<div class="prod_box">' . '<div class="product_title">' . 'Sorry, no item found.' . '</div></div>' ;
 			}
 		  ?>
 		  
@@ -93,8 +141,7 @@
 				}
 			}
 			else{
-				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
-				'</a></div>' . '</div></div>' ;
+				echo '<div class="prod_box">' . '<div class="product_title">' . 'Sorry, no item found.' . '</div></div>' ;
 			}
 			?>
 		  
@@ -113,8 +160,7 @@
 				}
 			}
 			else{
-				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
-				'</a></div>' . '</div></div>' ;
+				echo '<div class="prod_box">' . '<div class="product_title">' . 'Sorry, no item found.' . '</div></div>' ;
 			}
 			?>
 		  
@@ -132,8 +178,7 @@
 				}
 			}
 			else{
-				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
-				'</a></div>' . '</div></div>' ;
+				echo '<div class="prod_box">' . '<div class="product_title">' . 'Sorry, no item found.' . '</div></div>' ;
 			}
 			?>
 		</div>
@@ -158,8 +203,7 @@
 				}
 			}
 			else{
-				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
-				'</a></div>' . '</div></div>' ;
+				echo '<div class="prod_box">' . '<div class="product_title">' . 'Sorry, no item found.' . '</div></div>' ;
 			}
 		  ?>
 		
@@ -170,20 +214,25 @@
 			if(pg_num_rows($result) > 0){
 		
 				while ($row = pg_fetch_row($result)){
+					
+					echo '<form method="post" enctype="multipart/form-data">';
+					
 						echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . '<img src="images/' . $row[3] . '" alt="" border="0" width="180" height="180" />' . '<div align = left>' . nl2br("\n Item: ") . $row[0] . nl2br("\n Bid ID: ") . $row[1] . nl2br("\n Borrower: ") . $row[2] . nl2br("\n Begin: ") . $row[4] . nl2br("\n End: ") . $row[5] .
 					"<br><br>" .
-					"<Input type = 'Radio' Name ='ratings' value= '1'>1" . 
-					"<Input type = 'Radio' Name ='ratings' value= '2'>2" .
-					"<Input type = 'Radio' Name ='ratings' value= '3'>3" .
-					"<Input type = 'Radio' Name ='ratings' value= '4'>4" .
-					"<Input type = 'Radio' Name ='ratings' value= '5'>5" .
-					"<td><a href='ratings.php?itemID=$row[6]&owner=$row[7]&borrower=" . $_SESSION["login_user"] . "&rating=$row[1]' class=\"submit_btn\">Rate</a></td>" .
-					'</a></div>' . '</div></div>' ;
+					"<input type = 'Radio' name ='ratings' value= '1'>1" . 
+					"<input type = 'Radio' name ='ratings' value= '2'>2" .
+					"<input type = 'Radio' name ='ratings' value= '3'>3" .
+					"<input type = 'Radio' name ='ratings' value= '4'>4" .
+					"<input type = 'Radio' name ='ratings' value= '5'>5" .
+					"<input name='itemID' value='" .$row[6]. "' type='hidden' >" .
+					"<input name='owner' value='" .$row[7]. "' type='hidden' >" .
+					'<input type="submit" value="Rate" name="upd"/></div>' . '</div></div>' ;
+					
+					echo '</form>';
 				}
 			}
 			else{
-				echo '<div class="prod_box">' . '<div class="product_title"><a href="#">' . 'Sorry, no item found.' .
-				'</a></div>' . '</div></div>' ;
+				echo '<div class="prod_box">' . '<div class="product_title">' . 'Sorry, no item found.' . '</div></div>' ;
 			}
 		  ?> 
 		</div>

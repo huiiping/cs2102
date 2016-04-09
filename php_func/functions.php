@@ -51,7 +51,7 @@ or die('Could not connect: ' . pg_last_error());
 	}
 	
 	function select_Current_Bidding_Items($email){
-		$query = 'SELECT i.item_name, b.bidid, b.bidamt, u.name, i.item_pic, b.datelastbid FROM bid b, item i, users u, item_to_bid itb where itb.itemid = i.itemid AND itb.itemid = b.itemid AND (itb.startDate::date + itb.bidPeriod) < \'' . date("Y-m-d H:i:s") . '\' AND b.bidder = u.email AND b.bidder = \'' . $email . '\';';
+		$query = 'SELECT i.item_name, b.bidid, b.bidamt, u.name, i.item_pic, b.datelastbid FROM bid b, item i, users u, item_to_bid itb where itb.itemid = i.itemid AND itb.itemid = b.itemid AND (itb.startDate::date + itb.bidPeriod) >= \'' . date("Y-m-d H:i:s") . '\' AND b.bidder = u.email AND b.bidder = \'' . $email . '\';';
 		$result = pg_query($query) or die('Query failedd: ' . pg_last_error());
 		
 		return $result;
