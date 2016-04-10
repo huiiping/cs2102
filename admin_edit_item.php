@@ -14,7 +14,7 @@
 ?>
 	<!-- Insert form here -->
     <div class="center_content">
-      <div class="center_title_bar">Update User Details</div>
+      <div class="center_title_bar">Update Item Details</div>
 		<?php 
 			$result = select_A_Item($_GET['itemID']);
 			$getPickUp_Return_Loc = get_pickup_returnLoc($_GET['itemID']);
@@ -114,6 +114,38 @@
 			</tr>
 			</table>
 		</form>
+		
+		<div class="center_title_bar">Item put to bid (past and current)</div>
+		<?php
+			$allItemToBid = select_Item_To_Bid($_GET['itemID']);
+				echo "<table class=\"rwd-table\">";
+				echo "<tr><th>Start Date</th><th>End Date</th><th>Loan Begin</th><th>Loan End</th><th>Complete Transaction?</th>  </tr>"; 
+
+				while(list($startDate,$bidPeriod,$loanBegin,$loanPeriod,$transactionDone)=pg_fetch_array($allItemToBid))
+				{
+
+				echo "<tr>";    echo "<td align='center'>".$startDate."</td>";
+
+				echo "<td align='center'>".$bidPeriod."</td>";
+
+				echo "<td align='center'>".$loanBegin."</td>";
+				
+				echo "<td align='center'>".$loanPeriod."</td>";
+				
+				echo "<td align='center'>";
+				if ($transactionDone == "t"){
+					echo "YES";
+				}else{
+					echo "NO";
+				}
+				echo "</td>";
+
+				echo "</tr>";    
+
+				}
+
+				echo "</table>";
+		?>
     </div>
     <!-- end of center content -->
     <div class="right_content">

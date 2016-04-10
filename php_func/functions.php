@@ -545,5 +545,12 @@ if(isset($_POST['admin_insert_user_submit']))
 		$result = pg_query($query);
 		return $result;
 	}
+	
+	function select_Item_To_Bid($itemID){
+		$query = 'SELECT startDate::date, (startDate::date + bidPeriod) as endDate, loanBegin, (loanBegin + loanPeriod) as endLoan, transactionDone FROM item_to_bid where itemID=\'' . $itemID . '\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
 //pg_close($dbconn);
 ?>

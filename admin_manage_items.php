@@ -136,11 +136,11 @@
 				while(list($id,$iName,$iDesc,$iAvail,$iLoanT, $iCat, $iImage, $iOwner)=pg_fetch_array($result))
 				{
 
-				echo "<tr>";    echo "<td>".$iName."</td>";
+				echo "<tr>";    echo "<td align='center'>".$iName."</td>";
 
-				echo "<td>".$iDesc."</td>";
+				echo "<td align='center'>".$iDesc."</td>";
 
-				echo "<td>";
+				echo "<td align='center'>";
 				if ($iAvail == "t"){
 					echo "YES";
 				}else{
@@ -148,9 +148,9 @@
 				}
 				echo "</td>";
 
-				echo "<td>".$iLoanT."</td>";
+				echo "<td align='center'>".$iLoanT."</td>";
 				
-				echo "<td>".$iCat."</td>";
+				echo "<td align='center'>".$iCat."</td>";
 				
 				echo "<td>";
 				echo '<img src="images/';
@@ -158,7 +158,7 @@
 				echo '" alt="" border="0" width="100" height="100" />';
 				echo "</td>";
 				
-				echo "<td>".$iOwner."</td>";
+				echo "<td align='center'>".$iOwner."</td>";
 
 				echo "<td><a href='admin_edit_item.php?itemID=$id' class=\"submit_btn\">Edit</a>    <a href='admin_remove_item.php?itemID=$id' class=\"submit_btn\">Delete</a></td>";
 
