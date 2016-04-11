@@ -11,7 +11,23 @@
 
 	if (isset($_POST['formSubmit'])) {
 
-		// Check if image file is a actual image or fake image
+		//Check that image name, etc. isn't null
+		if(!isset($_POST['itemName'])) {
+			$_SESSION["addItemErrorMsg"] = "Please enter the item name.";
+   			break;
+		}
+		if (!isset($_POST['bidPeriodNum']) && $_POST['loanSetting'] == "BID") {
+			$_SESSION["addItemErrorMsg"] = "Please enter a bid length.";
+			break;
+		}
+		if (!isset($_POST['loanPeriodNum'])) {
+			$_SESSION["addItemErrorMsg"] = "Please enter a loan length.";
+			break;
+		}
+
+ 		if (isset($_POST['itemPic'])) {
+
+ 			// Check if image file is a actual image or fake image
 		$check = getimagesize($_FILES["itemPic"]["tmp_name"]);
 		if($check) {
 			$uploadOk = 1;
@@ -36,33 +52,80 @@
 
 		if ($uploadOk != 0) {
 
-			$query = "INSERT INTO item (item_name, description, availability, loansetting, owner, category, item_pic) 
+			$query = "INSERT INTO item (item_name, description, availability, loanSetting, owner, category, item_pic, pickuplocation, returnlocation) 
 			VALUES (
 				'".$_POST['itemName']."',
 				'".$_POST['itemDesc']."',
-				true,
+				TRUE,
 				'".$_POST['loanSetting']."', 
 				'".$owner."', 
 				". intval($_POST['itemCat']) .",
-				'".$_SESSION["login_user"]."_".basename($_FILES["itemPic"]["name"])."'
-				)";
+				'".$_SESSION["login_user"]."_".basename($_FILES["itemPic"]["name"])."',
+				'".$_POST['pickupLocation']."',
+				'".$_POST['returnLocation']."'
+				) RETURNING itemID;";
 
-			//echo $query;
+ 		}
+ 	}
 
-			$result = pg_query($query);
+ 	else { //no image
 
-			if (!$result) {
-				echo pg_last_error();
-				$_SESSION["addItemErrorMsg"] = "Failed to add item.";
-			} else {
-				$_SESSION["addItemErrorMsg"] = "Success!";
+ 		$query = "INSERT INTO item (item_name, description, availability, loanSetting, owner, category, pickuplocation, returnlocation) 
+			VALUES (
+				'".$_POST['itemName']."',
+				'".$_POST['itemDesc']."',
+				TRUE,
+				'".$_POST['loanSetting']."', 
+				'".$owner."', 
+				". intval($_POST['itemCat']) .",
+				'".$_POST['pickupLocation']."',
+				'".$_POST['returnLocation']."'
+				) RETURNING itemID;";
+
+ 	}
+		
+ 	if ($uploadOk == 0) { //if there was an upload problem, exit
+ 		break;
+
+ 	} else {
+
+		$result = pg_query($query) or die('Query failed: '.pg_last_error());
+		
+		if (!$result) {
+
+			$_SESSION["addItemErrorMsg"] = "".pg_last_error()."";
+
+		} else {
+
+			$loanDays = intval($_POST['loanPeriodQuantity']) * intval($_POST['loanPeriodNum']);
+			$id = pg_fetch_row($result)['0'];
+
+			if ($_POST['loanSetting'] == 'BID') { // if bid
+				$bidDays = intval($_POST['bidPeriodQuantity']) * intval($_POST['bidPeriodNum']);
+				$query2 = "INSERT INTO item_to_bid (itemid, startdate, bidperiod, loanperiod)
+				VALUES (
+					'".intval($id)."',
+					CURRENT_TIMESTAMP,
+					'".intval($bidDays)."',
+					'".$loanDays."'
+				);";
 			}
 
-			pg_free_result($result);
-
+			else { // if loan
+				$query2 = "INSERT INTO item_to_bid (itemid, loanperiod)
+				VALUES (
+					'".intval($id)."',
+					'".$loanDays."'
+				);";
+			}
+			$result2 = pg_query($query2) or die('Query failed: '.pg_last_error());
+			$_SESSION["addItemErrorMsg"] = "Success!";
 		}
+
+		pg_free_result($result);
 
 	}
 
-	pg_close($dbconn);
+	}
+
 ?> 

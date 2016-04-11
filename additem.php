@@ -1,6 +1,6 @@
 <?php
 
-$page_title = "Add Item";
+$page_title = "Add Item1";
 
 include("includes/header.php");
 
@@ -10,6 +10,15 @@ if(!isset($_SESSION["login_user"])){
 }
 
 ?>
+<script>
+	function showBidSettings() {
+		document.getElementById("bidSettings").style.display = "block";
+	}
+
+	function hideBidSettings() {
+		document.getElementById("bidSettings").style.display = "none";
+	}
+</script>
 <div class="center_content">
 	<div class="center_title_bar">Add Item</div>
 	<!--Add item form>-->
@@ -24,7 +33,8 @@ if(!isset($_SESSION["login_user"])){
 		<br>
 		<textarea name="itemDesc" id="itemDesc" rows="5"></textarea>
 		<br><br>
-		<label>Item Category:</label> <select name="itemCat" id="itemCat">
+		<label>Item Category:</label>
+		<select name="itemCat" id="itemCat">
 		<?php
 		$query = 'SELECT DISTINCT name, catid FROM category';
 		$result = pg_query($query) or die('Query failed: ' . pg_last_error());
@@ -34,55 +44,46 @@ if(!isset($_SESSION["login_user"])){
 		}
 		pg_free_result($result);
 		?>
-	</select>		
-	<br><br>
-	<input type="radio" name="loanSetting" id="loanSetting_share" value="SHARE" onclick="hideBidSettings()" checked="checked">Share
-	<input type="radio" name="loanSetting" id="loanSetting_rent" value="BID" onclick="showBidSettings()">Bid
-	<br><br>
-	<div id="bidSettings" style="display:none">
-		<label>Bid will close in </label> 
-		<input type="text" size="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="bidPeriodNum">
-		<select name="bidPeriodQuantity">
+		</select>
+		<br><br>
+		<label>Pickup Location:</label> <input type="text" name="pickupLocation">
+		<br><br>
+		<label>Return Location:</label> <input type="text" name="returnLocation">
+		<br><br>
+		<input type="radio" name="loanSetting" id="loanSetting_share" value="SHARE" onclick="hideBidSettings()" checked="checked">Share
+		<input type="radio" name="loanSetting" id="loanSetting_rent" value="BID" onclick="showBidSettings()">Bid
+		<br><br>
+		<div id="bidSettings" style="display:none">
+			<label>Close bid in </label> 
+			<input type="text" size="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="bidPeriodNum">
+			<select name="bidPeriodQuantity">
+				<option value="1">day(s)</option><br>
+				<option value="7">week(s)</option>
+			</select>
+			<br><br>
+		</div>
+		<label>Return in </label>
+		<input type="text" size="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="loanPeriodNum">
+		<select name="loanPeriodQuantity">
 			<option value="1">day(s)</option><br>
 			<option value="7">week(s)</option>
 		</select>
-	</div>
-	<br><br>
-	<label>Return in </label>
-	<input type="text" size="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="loanPeriodNum">
-	<select name="bidPeriodQuantity">
-		<option value="1">day(s)</option><br>
-		<option value="7">week(s)</option>
-	</select>
-	<br><br>
-	<input type="submit" name="formSubmit" value="Submit" >
+		<br><br>
+		<input type="submit" name="formSubmit" value="Submit" >
+	</form>
+
 	<?php
-	include_once('php_func\additem.php');
+		include_once('php_func\additem.php');
 	?>
 	<?php
-	if (isset($_POST['formSubmit'])) {
-		echo "<br><br>".$_SESSION["addItemErrorMsg"]."";
-	}
+		if (isset($_POST['formSubmit'])) {
+			echo "<br><br>".$_SESSION['addItemErrorMsg']."";
+		}
 	?>
-</form>
 </div>
 <!-- end of center content -->
 
 <?php
-
-include("includes/footer.php");
-
+	include("includes/footer.php");
 ?>
 
-<script>
-
-function showBidSettings() {
-	document.getElementById("bidSettings").style.display = "block";
-}
-
-function hideBidSettings() {
-	document.getElementById("bidSettings").style.display = "none";
-}
-
-
-</script>
