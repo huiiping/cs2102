@@ -308,6 +308,48 @@ or die('Could not connect: ' . pg_last_error());
 		return $result;
 	}
 	
+	function admin_insert_item_to_bid($itemId, $startDate, $bidPeriod, $loanBegin, $loanPeriod){
+		session_start();
+		$_SESSION["admin_Insert_Item_To_Bid_itemID"] = $itemId;
+		$_SESSION["admin_Insert_Item_To_Bid_startDate"] = $startDate;
+		$_SESSION["admin_Insert_Item_To_Bid_bidPeriod"] = $bidPeriod;
+		$_SESSION["admin_Insert_Item_To_Bid_loanBegin"] = $loanBegin;
+		$_SESSION["admin_Insert_Item_To_Bid_loanPeriod"] = $loanPeriod;
+		$convert_startDate = date_create($startDate);
+		$convert_loanBegin = date_create($loanBegin);
+		
+		if($convert_startDate > $convert_loanBegin){
+			$_SESSION["admin_Insert_Item_To_Bid_Result"] = "The start date event and loan date clashed.";
+		}
+		elseif(date_format($convert_startDate, "Y/m/d") < date("Y/m/d")){
+			$_SESSION["admin_Insert_Item_To_Bid_Result"] = "The start date event is already over.";
+		}
+		elseif(($convert_startDate + $bidPeriod) > $convert_loanBegin){
+			$_SESSION["admin_Insert_Item_To_Bid_Result"] = "The date for event end clashed with the loan date.";
+		}
+		else{
+			$query = 'INSERT INTO item_to_bid (itemId, startDate, bidPeriod, loanBegin, loanPeriod) VALUES(
+			\'' . $itemId . '\', \'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', \'' . $bidPeriod
+			. '\', \'' . date_format($convert_loanBegin, "Y/m/d") . '\' , \'' . $loanPeriod . '\');';
+			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+			
+			if(!$result){
+				$_SESSION["admin_Insert_Item_To_Bid_Result"] = "Failed to add.";
+				
+			}
+			else{
+				$_SESSION["admin_Insert_Item_To_Bid_itemID"] = "";
+				$_SESSION["admin_Insert_Item_To_Bid_startDate"] = "";
+				$_SESSION["admin_Insert_Item_To_Bid_bidPeriod"] = "";
+				$_SESSION["admin_Insert_Item_To_Bid_loanBegin"] = "";
+				$_SESSION["admin_Insert_Item_To_Bid_loanPeriod"] = "";
+				$_SESSION["admin_Insert_Item_To_Bid_Result"] = "Successfully added.";
+			}
+		}
+		
+		
+	}
+	
 	//Insert item to bid details
 	function insert_item_to_bid($itemId, $startDate, $bidPeriod, $loanBegin, $loanPeriod){
 		$convert_startDate = date_create($startDate);
@@ -508,6 +550,18 @@ if(isset($_POST['admin_insert_user_submit']))
 	admin_insert_New_User();
 }
 
+if(isset($_POST['admin_insert_item_to_bid_submit']))
+{
+	$itemID = $_POST["formItem"];
+	$startDate = $_POST["startdate"];
+	$bidPeriod = $_POST["bidperiod"];
+	$loanBegin = $_POST["loanbegin"];
+	$loanPeriod = $_POST["loanperiod"];
+	admin_insert_item_to_bid($itemID, $startDate, $bidPeriod, $loanBegin, $loanPeriod );
+	
+	header("Location: ../admin_insert_item_to_bid.php");
+}
+
 	function search_Results($keyword) {
 		$query = 'SELECT i.itemID, i.item_name, i.description, i.availability, i.loanSetting, c.name, i.item_pic, u.name 
 		FROM item i, users u, category c 
@@ -548,6 +602,13 @@ if(isset($_POST['admin_insert_user_submit']))
 	
 	function select_Item_To_Bid($itemID){
 		$query = 'SELECT startDate::date, (startDate::date + bidPeriod) as endDate, loanBegin, (loanBegin + loanPeriod) as endLoan, transactionDone FROM item_to_bid where itemID=\'' . $itemID . '\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
+	
+	function select_Items_Available(){
+		$query = 'SELECT * FROM item where availability=\'TRUE\';';
 		
 		$result = pg_query($query);
 		return $result;

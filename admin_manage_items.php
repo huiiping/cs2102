@@ -94,7 +94,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" ><input type="submit", name="admin_insert_item_submit" value="Inserts"></td>
+				<td colspan="2" align="center" ><input type="submit", name="admin_insert_item_submit" value="Insert"></td>
 			</tr>
 			
 		</table>
