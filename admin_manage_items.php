@@ -127,6 +127,7 @@
 			
 		?>
 		</form>
+		<a href='admin_insert_item_to_bid.php' class=\"submit_btn\">Click here to add a event to bid</a>
 		<div class="center_title_bar">List of Items</div>
 		<?php
 			$result = select_All_Items();

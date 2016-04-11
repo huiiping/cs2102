@@ -317,14 +317,14 @@ or die('Could not connect: ' . pg_last_error());
 		$_SESSION["admin_Insert_Item_To_Bid_loanPeriod"] = $loanPeriod;
 		$convert_startDate = date_create($startDate);
 		$convert_loanBegin = date_create($loanBegin);
-		
+		$convert_startDate_check = date_create($startDate);
 		if($convert_startDate > $convert_loanBegin){
 			$_SESSION["admin_Insert_Item_To_Bid_Result"] = "The start date event and loan date clashed.";
 		}
 		elseif(date_format($convert_startDate, "Y/m/d") < date("Y/m/d")){
 			$_SESSION["admin_Insert_Item_To_Bid_Result"] = "The start date event is already over.";
 		}
-		elseif(($convert_startDate + $bidPeriod) > $convert_loanBegin){
+		elseif(date_add($convert_startDate_check,date_interval_create_from_date_string($bidPeriod . " days")) > $convert_loanBegin){
 			$_SESSION["admin_Insert_Item_To_Bid_Result"] = "The date for event end clashed with the loan date.";
 		}
 		else{
@@ -608,7 +608,7 @@ if(isset($_POST['admin_insert_item_to_bid_submit']))
 	}
 	
 	function select_Items_Available(){
-		$query = 'SELECT * FROM item where availability=\'TRUE\';';
+		$query = 'SELECT * FROM item i where i.availability=\'TRUE\' AND i.itemID NOT IN(SELECT ib.itemID FROM item_to_bid ib WHERE ib.itemID=i.itemID AND ib.transactionDone=\'FALSE\');';
 		
 		$result = pg_query($query);
 		return $result;
