@@ -94,7 +94,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" ><input type="submit", name="admin_insert_item_submit" value="Inserts"></td>
+				<td colspan="2" align="center" ><input type="submit", name="admin_insert_item_submit" value="Insert"></td>
 			</tr>
 			
 		</table>
@@ -127,6 +127,7 @@
 			
 		?>
 		</form>
+		<a href='admin_insert_item_to_bid.php' class=\"submit_btn\">Click here to add a event to bid</a>
 		<div class="center_title_bar">List of Items</div>
 		<?php
 			$result = select_All_Items();
