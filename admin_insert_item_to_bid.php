@@ -102,7 +102,7 @@
 
 				//echo "<td>".$e."</td>";
 
-				echo "<td><a href='admin_edit_item_to_bid.php?itemID=$e' class=\"submit_btn\">Edit</a>    <a href='admin_remove_user.php?email=$b' class=\"submit_btn\">Delete</a></td>";
+				echo "<td><a href='admin_edit_item_to_bid.php?itemID=$e' class=\"submit_btn\">Edit</a>";
 
 				echo "</tr>";    
 
