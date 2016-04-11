@@ -645,10 +645,10 @@ if(isset($_POST['admin_insert_item_to_bid_submit']))
 		}
 		else{
 			$query = 'UPDATE item_to_bid SET startDate=\'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', bidPeriod=\'' . $bidPeriod . '\', loanBegin=\'' . date_format($convert_loanBegin, "Y/m/d") . '\', loanPeriod=\''. $loanPeriod . '\' where itemID=\'' . $itemID . '\' AND transactionDone=\'FALSE\';';
-			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+			$result = pg_query($query);
 			
 			if(!$result){
-				$_SESSION["admin_Update_Item_To_Bid_Result"] = "Failed to add.";
+				$_SESSION["admin_Update_Item_To_Bid_Result"] = "Failed to update.";
 				
 			}
 			else{
