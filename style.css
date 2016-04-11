@@ -555,6 +555,17 @@ a.submit_btn{
 	color:#159dcc;
 }
 
+a.long_btn {
+	width:75px;
+	height:24px;
+	display:block;
+	background:url(images/link_bg.gif) no-repeat center;
+	float:right;
+	text-align:center;
+	line-height:24px;
+	color:#159dcc;
+}
+
 /*select style*/
 select.optionL{
 	width:253px;
