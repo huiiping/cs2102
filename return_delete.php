@@ -15,7 +15,7 @@ $query2 = "UPDATE item_to_bid
 			SET transactionDone = 'TRUE' 
 			WHERE itemID = '".$itemID."';";
 			
-$query3 = "DELETE FROM item WHERE itemID='".$itemID."';"
+$query3 = "DELETE FROM item WHERE itemID='".$itemID."';";
 			
 		$result = pg_query($query) ;
 		$result2 = pg_query($query2);
