@@ -76,11 +76,11 @@
 				while(list($a,$b,$c,$d,$e)=pg_fetch_array($result))
 				{
 
-				echo "<tr>";    echo "<td>".$a."</td>";
+				echo "<tr>";    echo "<td  align='center'>".$a."</td>";
 
-				echo "<td>".$b."</td>";
+				echo "<td  align='center'>".$b."</td>";
 
-				echo "<td>".$d."</td>";
+				echo "<td  align='center'>".$d."</td>";
 
 				//echo "<td>".$e."</td>";
 
