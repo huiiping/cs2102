@@ -112,9 +112,11 @@
 			}
 
 			else { // if loan
-				$query2 = "INSERT INTO item_to_bid (itemid, loanperiod)
+				$query2 = "INSERT INTO item_to_bid (itemid, startdate, bidperiod, loanperiod)
 				VALUES (
 					'".intval($id)."',
+					CURRENT_TIMESTAMP,
+					0,
 					'".$loanDays."'
 				);";
 			}
