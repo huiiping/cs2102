@@ -72,11 +72,44 @@
 				echo $_SESSION["admin_Insert_Item_To_Bid_Result"];
 				$_SESSION["admin_Insert_Item_To_Bid_Result"] = "";
 			}
+			
+			if($_SESSION["admin_Update_Item_To_Bid_Result"] != ""){
+				echo $_SESSION["admin_Update_Item_To_Bid_Result"];
+				$_SESSION["admin_Update_Item_To_Bid_Result"] = "";
+			}
 
 			
 		?>
 		</form>
-		
+		<div class="center_title_bar">List of Items to bid</div>
+		<?php
+			include_once 'php_func\functions.php';
+			$result = select_Unsettle_Items_to_bid();
+				echo "<table class=\"rwd-table\">";
+				echo "<tr><th>Item Name</th><th>Start Date</th><th>Bid period</th><th>Loan Begin</th><th>Loan Period</th>    </tr>"; 
+
+				while(list($a,$b,$c,$d,$e,$f)=pg_fetch_array($result))
+				{
+
+				echo "<tr>";    echo "<td  align='center'>".$f."</td>";
+
+				echo "<td  align='center'>".$a."</td>";
+
+				echo "<td  align='center'>".$b."</td>";
+				
+				echo "<td  align='center'>".$c."</td>";
+				echo "<td  align='center'>".$d."</td>";
+
+				//echo "<td>".$e."</td>";
+
+				echo "<td><a href='admin_edit_item_to_bid.php?itemID=$e' class=\"submit_btn\">Edit</a>    <a href='admin_remove_user.php?email=$b' class=\"submit_btn\">Delete</a></td>";
+
+				echo "</tr>";    
+
+				}
+
+				echo "</table>";
+		?>
     </div>
     <!-- end of center content -->
     <div class="right_content">

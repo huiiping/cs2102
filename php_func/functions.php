@@ -613,5 +613,48 @@ if(isset($_POST['admin_insert_item_to_bid_submit']))
 		$result = pg_query($query);
 		return $result;
 	}
+	
+	function select_Unsettle_Items_to_bid(){
+		$query = 'SELECT ib.startDate, ib.bidPeriod, ib.loanBegin, ib.loanPeriod, ib.itemID, i.item_name FROM item_to_bid ib, item i where ib.itemID=i.itemID AND ib.transactionDone=\'FALSE\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
+	
+	function select_A_Unsettle_Items_to_bid($itemID){
+		$query = 'SELECT startDate::date, bidPeriod, loanBegin, loanPeriod, itemID FROM item_to_bid where itemID=\'' . $itemID . '\' AND transactionDone=\'FALSE\';';
+		
+		$result = pg_query($query);
+		return $result;
+	}
+	
+	
+	function update_A_Unsettle_Items_to_bid($itemID, $startDate, $bidPeriod, $loanBegin, $loanPeriod){
+		session_start();
+		$convert_startDate = date_create($startDate);
+		$convert_loanBegin = date_create($loanBegin);
+		$convert_startDate_check = date_create($startDate);
+		if($convert_startDate > $convert_loanBegin){
+			$_SESSION["admin_Update_Item_To_Bid_Result"] = "The start date event and loan date clashed.";
+		}
+		elseif(date_format($convert_startDate, "Y/m/d") < date("Y/m/d")){
+			$_SESSION["admin_Update_Item_To_Bid_Result"] = "The start date event is already over.";
+		}
+		elseif(date_add($convert_startDate_check,date_interval_create_from_date_string($bidPeriod . " days")) > $convert_loanBegin){
+			$_SESSION["admin_Update_Item_To_Bid_Result"] = "The date for event end clashed with the loan date.";
+		}
+		else{
+			$query = 'UPDATE item_to_bid SET startDate=\'' . date_format($convert_startDate, "Y/m/d  H:i:s") . '\', bidPeriod=\'' . $bidPeriod . '\', loanBegin=\'' . date_format($convert_loanBegin, "Y/m/d") . '\', loanPeriod=\''. $loanPeriod . '\' where itemID=\'' . $itemID . '\' AND transactionDone=\'FALSE\';';
+			$result = pg_query($query) or die('Query failed: ' . pg_last_error());
+			
+			if(!$result){
+				$_SESSION["admin_Update_Item_To_Bid_Result"] = "Failed to add.";
+				
+			}
+			else{
+				$_SESSION["admin_Update_Item_To_Bid_Result"] = "Successfully updated.";
+			}
+		}
+	}
 //pg_close($dbconn);
 ?>
