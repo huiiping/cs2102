@@ -556,10 +556,10 @@ a.submit_btn{
 }
 
 a.long_btn {
-	width:75px;
+	width:125px;
 	height:24px;
-	display:block;
-	background:url(images/link_bg.gif) no-repeat center;
+	background-color: white; 
+	border: 2px solid #008CBA;
 	float:right;
 	text-align:center;
 	line-height:24px;
